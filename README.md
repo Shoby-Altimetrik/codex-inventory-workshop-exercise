@@ -1,29 +1,32 @@
 # Codex Inventory Workshop Exercise
 
 ## Workshop Overview
-Welcome to a hands-on OpenAI Codex workshop built around a realistic full-stack application. This project is designed to help learners move beyond “toy prompts” and practice the actual day-to-day workflow of using Codex to understand code, diagnose defects, implement changes, and validate outcomes.
+This workshop is designed to teach practical, repeatable workflows for using OpenAI Codex in a real codebase.
 
-This repository includes:
-- A Vue frontend (`client/`)
-- A FastAPI backend (`server/`)
-- Automated tests for both seeded defects and feature work (`tests/`, `client/src/__tests__/`)
-- A baseline branch with intentional issues (`main`)
-- An instructor solution branch with completed fixes (`codex-instructor-solution`)
+You will work through a full-stack app with:
+- Vue frontend (`client/`)
+- FastAPI backend (`server/`)
+- Seeded tests and intentional defects (`tests/`, `client/src/__tests__/`)
 
-Primary workshop outcomes:
-1. Get participants fully set up with the Codex app and working in a local project.
-2. Practice structured debugging and feature delivery with Codex in a controlled scenario.
+Workshop goals:
+1. Install and configure Codex app successfully.
+2. Use Codex to diagnose and fix real defects.
+3. Use Codex to add net-new functionality with test validation.
+4. Use Playwright CLI skill to validate and iterate on a UI feature.
+
+Recommended branch strategy:
+- Start on `main` for workshop exercises.
+- Compare to `codex-instructor-solution` after completion.
 
 ---
 
 ## Learning Objectives
 By the end of the workshop, participants should be able to:
-- Install and configure the Codex app for local repository work.
-- Use Codex prompts to inspect architecture, trace failures, and generate focused patches.
-- Resolve API/UI contract drift with test-guided debugging.
-- Implement new backend and frontend features from acceptance criteria.
-- Validate changes with backend and frontend tests before shipping.
-- Reflect on prompt quality, verification habits, and implementation tradeoffs.
+- Install Codex app and connect it to a local repository.
+- Prompt Codex to map architecture, identify failure roots, and generate targeted diffs.
+- Resolve backend/frontend contract drift safely.
+- Add backend and frontend features from acceptance criteria.
+- Validate behavior with automated tests and browser automation.
 
 ---
 
@@ -33,27 +36,27 @@ By the end of the workshop, participants should be able to:
 - Node.js 20+
 - Python 3.11+
 - `pip` (or `uv`)
-- A ChatGPT account or OpenAI API key for Codex sign-in
+- ChatGPT sign-in or OpenAI API key for Codex authentication
 
 ### Clone and install dependencies
 ```bash
-# from your parent projects directory
+# clone your workshop repo
 git clone <your-repo-url>
 cd codex-inventory-workshop-exercise
 
-# backend
+# backend setup
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r server/requirements.txt
 pip install pytest httpx
 
-# frontend
+# frontend setup
 cd client
 npm install
 cd ..
 ```
 
-### Run the app locally
+### Run the app
 Use two terminals.
 
 Terminal 1 (backend):
@@ -74,7 +77,7 @@ npm run dev
 - Backend: `http://localhost:8001`
 - API docs: `http://localhost:8001/docs`
 
-### Run tests
+### Test commands
 Backend:
 ```bash
 source .venv/bin/activate
@@ -91,167 +94,246 @@ npm test
 ---
 
 ## Codex Workflow Primer
-Use this loop repeatedly in each exercise:
+Use this loop in every exercise.
 
-1. **Orient**
-   - Ask Codex for a quick map of the relevant files and data flow.
-   - Example: “Trace how order status filter moves from UI to API query params.”
+1. Orient
+- Ask Codex for relevant files and data flow first.
+- Example: `Trace order_status from UI controls to backend query filtering.`
 
-2. **Observe failure**
-   - Run tests or reproduce manually.
-   - Share exact failing output with Codex.
+2. Reproduce
+- Run tests or UI flow and capture exact failure output.
 
-3. **Constrain the task**
-   - Ask for minimal, high-confidence edits only.
-   - Example: “Fix this failing test without broad refactors.”
+3. Constrain
+- Ask for smallest viable fix with no unrelated refactors.
 
-4. **Patch and verify**
-   - Apply one logical change at a time.
-   - Re-run tests immediately after each fix.
+4. Verify
+- Re-run tests immediately.
+- Re-check manual behavior in browser.
 
-5. **Summarize and lock in**
-   - Ask Codex for a short changelog and risk review.
-   - Confirm acceptance criteria explicitly.
+5. Summarize
+- Ask Codex for a short changelog, risks, and follow-up hardening ideas.
 
-Prompt patterns that work well:
-- “Explain root cause from this stack trace and file references.”
-- “Propose smallest patch that makes this test pass.”
-- “List edge cases this change could break.”
-- “Write/adjust tests first, then implement.”
+Prompt patterns:
+- `Find root cause from this failing test output and propose a minimal patch.`
+- `Keep API contract stable and update only what is needed.`
+- `Add or update tests first, then implement.`
 
 ---
 
-## Exercise 1: Install Codex App and Connect to the Project
-Goal: ensure every participant can run Codex locally against this codebase.
+## Exercise 1: Install Codex App and Connect Project (15 minutes)
+Goal: everyone can run Codex locally against this repository.
 
-Official reference:
-- OpenAI Codex app guide: [https://developers.openai.com/codex/app](https://developers.openai.com/codex/app)
+Official guide:
+- OpenAI Codex app docs: [https://developers.openai.com/codex/app](https://developers.openai.com/codex/app)
 
-### What participants should complete
-1. Install the Codex app from the official guide.
-2. Open Codex and sign in (ChatGPT account or API key).
-3. Select this project folder in Codex.
-4. Confirm Codex is in **Local** mode for this repository.
-5. Send your first project message in Codex.
+### Tasks
+1. Install Codex app using the official docs.
+2. Sign in (ChatGPT or API key).
+3. Open this repository folder in Codex.
+4. Confirm Codex can read local files.
+5. Ask three orientation prompts:
+   - `Summarize repository structure.`
+   - `List intentionally failing tests and their purpose.`
+   - `Map dashboard summary data from backend to UI.`
 
-### Suggested first messages
-- “Summarize this repository structure and key entry points.”
-- “Which tests are designed to fail in the baseline branch and why?”
-- “Show me the backend endpoints used by the dashboard.”
-
-### Verification checklist
-- Codex opens this repository and can read files.
-- Codex can answer architecture questions with correct paths.
-- Participant can issue one actionable prompt and receive a useful result.
-
-### Troubleshooting tips
-- If project files appear empty, confirm the selected folder path.
-- If auth fails, sign out/in again and re-open the project.
-- If local execution tools are unavailable, verify OS permissions for terminal/shell access.
+### Done when
+- Codex returns accurate file paths and behavior summary.
+- Participant can issue prompts and iterate in local mode.
 
 ---
 
-## Exercise 2: Resolve Seeded Errors with Codex
-Goal: use Codex + tests to fix intentionally seeded defects.
+## Exercise 2: Bug Fix A - Query Parameter Contract (10 minutes)
+Goal: fix status filter mismatch between frontend and backend contracts.
 
-### Seeded defects
-- **Bug A**: frontend sends `status` while backend historically expected `order_status`.
-- **Bug B**: low-stock logic used `< reorder_point` instead of `<= reorder_point`.
-- **Bug C**: dashboard response used `total_value` while UI expected `totalValue`.
+### Problem
+Frontend sends `status`, while backend primarily uses `order_status`.
 
 ### Steps
-1. Start from the baseline branch:
+1. Checkout workshop baseline:
    ```bash
    git checkout main
    ```
-2. Run backend regression tests:
+2. Run frontend tests:
+   ```bash
+   cd client
+   npm test
+   ```
+3. Find failing API contract test.
+4. Use Codex to patch query param mapping.
+5. Re-run tests and verify status filtering in UI.
+
+### Acceptance criteria
+- Frontend contract test for `order_status` passes.
+- Filtering by `Processing` or `Backordered` returns correct rows.
+
+---
+
+## Exercise 3: Bug Fix B - Low Stock Business Rule (8 minutes)
+Goal: fix low-stock calculation logic.
+
+### Problem
+Low-stock count uses `< reorder_point` instead of `<= reorder_point`.
+
+### Steps
+1. Run backend regression tests:
    ```bash
    source .venv/bin/activate
    cd tests
    pytest backend/test_bug_regressions.py -q
    ```
-3. Run frontend contract tests:
-   ```bash
-   cd ../client
-   npm test
-   ```
-4. Use Codex to map each failure to exact files and minimal fixes.
-5. Apply one fix at a time and re-run tests after each patch.
+2. Use Codex to locate low-stock calculation.
+3. Apply minimal fix.
+4. Re-run test file.
 
-### Hints
-- Prioritize contract mismatches first (query keys, response field names).
-- Use test failure text as the source of truth, not assumptions.
-- Keep naming consistent across backend return values and frontend consumers.
-
-### Expected outcomes
-- Backend bug regression tests pass.
-- Frontend API contract tests pass.
-- Dashboard metrics and status filtering behave correctly.
+### Acceptance criteria
+- `lowStockCount` includes items exactly at reorder point.
+- Backend regression test for Bug B passes.
 
 ---
 
-## Exercise 3: Add New Features with Codex
-Goal: use Codex to deliver missing features from product-style acceptance criteria.
+## Exercise 4: Bug Fix C - Response Field Naming Drift (8 minutes)
+Goal: align API payload with frontend expectations.
 
-### Feature 1: Supplier Lead Time Risk
-Implement:
-- `GET /api/risk/suppliers?warehouse=&category=`
-- Response rows with:
+### Problem
+Dashboard response returns `total_value` while UI expects `totalValue`.
+
+### Steps
+1. Reproduce failing dashboard metric behavior.
+2. Use Codex to trace response contract.
+3. Fix naming mismatch with minimal blast radius.
+4. Re-run frontend and backend regression tests.
+
+### Acceptance criteria
+- Dashboard shows total value correctly.
+- Regression tests for Bug C pass.
+
+---
+
+## Exercise 5: Feature A - Supplier Lead Time Risk API + UI (16 minutes)
+Goal: implement a full-stack feature from endpoint to table rendering.
+
+### Build
+- API endpoint: `GET /api/risk/suppliers?warehouse=&category=`
+- Response shape per row:
   - `supplier`
   - `avg_lead_time_days`
   - `risk_level`
   - `affected_skus`
-- Render supplier risk data in dashboard table.
-
-Acceptance criteria:
-- Endpoint returns `200` and non-empty array.
-- Payload shape matches contract.
-- Risk table renders and updates from API data.
-
-### Feature 2: CSV Export for Filtered Orders
-Implement:
-- `GET /api/orders/export.csv`
-- Respect active filters (`warehouse`, `category`, `order_status`, `month`).
-- Wire **Export CSV** button to trigger real export flow.
-
-Acceptance criteria:
-- Endpoint returns `text/csv` with header row.
-- Exported rows match active filters.
-- UI action invokes export behavior successfully.
+- Dashboard should render returned rows.
 
 ### Steps
-1. Run failing feature tests:
-   - `tests/backend/test_feature_endpoints.py`
-   - `client/src/__tests__/app.features.test.js`
-2. Implement backend first, then frontend integration.
-3. Re-run all tests.
-4. Verify behavior manually in browser.
+1. Run feature endpoint tests:
+   ```bash
+   source .venv/bin/activate
+   cd tests
+   pytest backend/test_feature_endpoints.py -q
+   ```
+2. Use Codex to implement backend aggregation and risk bucketing.
+3. Update frontend fetch/render behavior.
+4. Re-run backend + frontend tests.
+
+### Acceptance criteria
+- Endpoint returns `200` and non-empty array.
+- Payload matches required shape.
+- Supplier risk table renders in dashboard.
+
+---
+
+## Exercise 6: Feature B - CSV Export for Filtered Orders (14 minutes)
+Goal: implement export functionality that honors active filters.
+
+### Build
+- API endpoint: `GET /api/orders/export.csv`
+- Include filters: `warehouse`, `category`, `order_status`, `month`
+- Wire `Export CSV` button to trigger export behavior.
+
+### Steps
+1. Run failing feature tests (backend and frontend).
+2. Use Codex to implement backend CSV output and content headers.
+3. Use Codex to wire frontend export trigger.
+4. Verify generated CSV content matches active filters.
+
+### Acceptance criteria
+- Endpoint returns `text/csv` with header row.
+- Filtered export data is correct.
+- Export trigger test passes.
+
+---
+
+## Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX (14 minutes)
+Goal: add a UI feature and validate it using the Playwright CLI skill workflow.
+
+### Feature to add
+Add a client-side `Order Search` input in the Orders section that filters visible orders by:
+- order id
+- customer
+- status
+
+### Why Playwright here
+This feature is interaction-heavy and ideal for browser automation validation:
+- typing into a real input
+- checking list changes
+- verifying no regressions in Apply Filters flow
+
+### Playwright CLI skill setup
+Use the Playwright skill wrapper flow.
+
+Prerequisite check:
+```bash
+command -v npx >/dev/null 2>&1
+```
+
+Set helper path:
+```bash
+export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"
+```
+
+### Playwright validation flow
+```bash
+"$PWCLI" open http://localhost:3000 --headed
+"$PWCLI" snapshot
+# click/typing refs will vary by snapshot, use returned e* ids
+"$PWCLI" type eX "ORD-5002"
+"$PWCLI" snapshot
+"$PWCLI" screenshot
+```
+
+Recommended checks:
+- Searching `ORD-5002` leaves only that order visible.
+- Clearing search restores full list.
+- Existing Apply Filters behavior still works after adding search.
+
+### Acceptance criteria
+- New search input exists and filters orders in real time.
+- Behavior validated manually and with Playwright CLI interaction.
+- No existing tests regress.
 
 ---
 
 ## Stretch Goals
-- Add deprecation messaging for `status` vs `order_status` alias behavior.
-- Add loading and error states for all dashboard cards/tables.
-- Add pagination and sort controls to orders list.
-- Add end-to-end test coverage for filter + export flow.
-- Add a short architectural decision record describing final API contract choices.
+- Add deprecation warning support for `status` alias usage in backend logs.
+- Add loading and error states for all async dashboard sections.
+- Add sorting and pagination controls for orders.
+- Add Playwright smoke script snippets for critical paths.
 
 ---
 
 ## Debrief / Reflection Prompts
-Use these to close the workshop:
-- Which prompt formats produced the fastest high-confidence fixes?
-- Which bug took the longest and why?
-- Which tests prevented regressions you would likely miss manually?
-- What would you improve in prompt hygiene for future sessions?
-- If this were production, what observability and rollback steps would you add?
+- Which prompts produced the highest-confidence code edits?
+- Which failures were easiest to localize and why?
+- Which checks from Playwright caught issues unit tests did not?
+- Where did API contracts drift, and how can your team prevent that?
+- What would you productionize next (observability, rollout, safety)?
 
 ---
 
 ## 90-Minute Agenda
-- **0:00–0:10** Intro, goals, repository orientation.
-- **0:10–0:25** Exercise 1: install Codex app and connect local project.
-- **0:25–0:50** Exercise 2: resolve seeded defects.
-- **0:50–1:20** Exercise 3: implement new features.
-- **1:20–1:27** Full test and manual validation pass.
-- **1:27–1:30** Debrief and takeaways.
+- **0:00-0:15** Exercise 1: install Codex app and connect local project.
+- **0:15-0:25** Exercise 2: Bug Fix A (`status` vs `order_status`).
+- **0:25-0:33** Exercise 3: Bug Fix B (low stock rule).
+- **0:33-0:41** Exercise 4: Bug Fix C (`total_value` vs `totalValue`).
+- **0:41-0:57** Exercise 5: Feature A (supplier risk endpoint + UI).
+- **0:57-1:11** Exercise 6: Feature B (CSV export).
+- **1:11-1:25** Exercise 7: Playwright feature and validation.
+- **1:25-1:30** Debrief and recap.
