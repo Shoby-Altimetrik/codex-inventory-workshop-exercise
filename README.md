@@ -9,20 +9,20 @@ You will work through a full-stack app with:
 - Seeded tests and intentional defects (`tests/`, `client/src/__tests__/`)
 
 Workshop goals:
-1. Install and configure Codex app successfully.
+1. Install and configure Codex successfully (App or CLI).
 2. Use Codex to diagnose and fix real defects.
 3. Use Codex to add net-new functionality with test validation.
 4. Use Playwright CLI skill to validate and iterate on a UI feature.
 
 Recommended branch strategy:
 - Start on `main` for workshop exercises.
-- Compare to `codex-instructor-solution` after completion.
+- Use feature branches for participant submissions or instructor review.
 
 ---
 
 ## Learning Objectives
 By the end of the workshop, participants should be able to:
-- Install Codex app and connect it to a local repository.
+- Install Codex (App or CLI) and connect it to a local repository.
 - Prompt Codex to map architecture, identify failure roots, and generate targeted diffs.
 - Resolve backend/frontend contract drift safely.
 - Add backend and frontend features from acceptance criteria.
@@ -120,29 +120,45 @@ Prompt patterns:
 
 ---
 
-## Exercise 1: Install Codex App and Connect Project (15 minutes)
-Goal: everyone can run Codex locally against this repository.
+## Exercise 1: Install Codex (App or CLI) and Connect Project (10-20 minutes)
+Goal: everyone can run Codex locally against this repository using either UI or terminal workflow.
 
-Official guide:
-- OpenAI Codex app docs: [https://developers.openai.com/codex/app](https://developers.openai.com/codex/app)
+Official guides:
+- ChatGPT Codex get-started: [https://chatgpt.com/codex/get-started](https://chatgpt.com/codex/get-started)
+- Codex App docs: [https://developers.openai.com/codex/app](https://developers.openai.com/codex/app)
+- Codex CLI quickstart (official repo): [https://github.com/openai/codex](https://github.com/openai/codex)
 
-### Tasks
-1. Install Codex app using the official docs.
-2. Sign in (ChatGPT or API key).
-3. Open this repository folder in Codex.
-4. Confirm Codex can read local files.
-5. Ask three orientation prompts:
+### Option A: Codex App path
+1. Open Codex app and sign in with your ChatGPT account.
+2. Select this local folder/repository.
+3. Kick off your first task prompt.
+4. Run these orientation prompts:
    - `Summarize repository structure.`
    - `List intentionally failing tests and their purpose.`
    - `Map dashboard summary data from backend to UI.`
 
+### Option B: Codex CLI path
+1. Install Codex CLI:
+   ```bash
+   npm install -g @openai/codex
+   # or
+   brew install --cask codex
+   ```
+2. Start Codex in this repo:
+   ```bash
+   codex
+   ```
+3. Sign in with ChatGPT (recommended) or API key.
+4. Run the same three orientation prompts from Option A.
+
 ### Done when
+- Participant can run Codex via App or CLI.
 - Codex returns accurate file paths and behavior summary.
 - Participant can issue prompts and iterate in local mode.
 
 ---
 
-## Exercise 2: Bug Fix A - Query Parameter Contract (10 minutes)
+## Exercise 2: Bug Fix A - Query Parameter Contract (10-20 minutes)
 Goal: fix status filter mismatch between frontend and backend contracts.
 
 ### Problem
@@ -168,7 +184,7 @@ Frontend sends `status`, while backend primarily uses `order_status`.
 
 ---
 
-## Exercise 3: Bug Fix B - Low Stock Business Rule (8 minutes)
+## Exercise 3: Bug Fix B - Low Stock Business Rule (10-20 minutes)
 Goal: fix low-stock calculation logic.
 
 ### Problem
@@ -191,7 +207,7 @@ Low-stock count uses `< reorder_point` instead of `<= reorder_point`.
 
 ---
 
-## Exercise 4: Bug Fix C - Response Field Naming Drift (8 minutes)
+## Exercise 4: Bug Fix C - Response Field Naming Drift (10-20 minutes)
 Goal: align API payload with frontend expectations.
 
 ### Problem
@@ -209,7 +225,7 @@ Dashboard response returns `total_value` while UI expects `totalValue`.
 
 ---
 
-## Exercise 5: Feature A - Supplier Lead Time Risk API + UI (16 minutes)
+## Exercise 5: Feature A - Supplier Lead Time Risk API + UI (10-20 minutes)
 Goal: implement a full-stack feature from endpoint to table rendering.
 
 ### Build
@@ -239,7 +255,7 @@ Goal: implement a full-stack feature from endpoint to table rendering.
 
 ---
 
-## Exercise 6: Feature B - CSV Export for Filtered Orders (14 minutes)
+## Exercise 6: Feature B - CSV Export for Filtered Orders (10-20 minutes)
 Goal: implement export functionality that honors active filters.
 
 ### Build
@@ -260,7 +276,7 @@ Goal: implement export functionality that honors active filters.
 
 ---
 
-## Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX (14 minutes)
+## Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX (10-20 minutes)
 Goal: add a UI feature and validate it using the Playwright CLI skill workflow.
 
 ### Feature to add
@@ -328,12 +344,12 @@ Recommended checks:
 
 ---
 
-## 90-Minute Agenda
-- **0:00-0:15** Exercise 1: install Codex app and connect local project.
-- **0:15-0:25** Exercise 2: Bug Fix A (`status` vs `order_status`).
-- **0:25-0:33** Exercise 3: Bug Fix B (low stock rule).
-- **0:33-0:41** Exercise 4: Bug Fix C (`total_value` vs `totalValue`).
-- **0:41-0:57** Exercise 5: Feature A (supplier risk endpoint + UI).
-- **0:57-1:11** Exercise 6: Feature B (CSV export).
-- **1:11-1:25** Exercise 7: Playwright feature and validation.
-- **1:25-1:30** Debrief and recap.
+## Agenda (10-20 Minutes Per Segment)
+- Exercise 1: install Codex (App or CLI) and connect local project. (10-20 minutes)
+- Exercise 2: Bug Fix A (`status` vs `order_status`). (10-20 minutes)
+- Exercise 3: Bug Fix B (low stock rule). (10-20 minutes)
+- Exercise 4: Bug Fix C (`total_value` vs `totalValue`). (10-20 minutes)
+- Exercise 5: Feature A (supplier risk endpoint + UI). (10-20 minutes)
+- Exercise 6: Feature B (CSV export). (10-20 minutes)
+- Exercise 7: Playwright feature and validation. (10-20 minutes)
+- Debrief and recap. (10-20 minutes)
