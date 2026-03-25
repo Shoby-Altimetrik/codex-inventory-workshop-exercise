@@ -1,0 +1,50 @@
+[
+  {
+    "id": "INV-1001",
+    "sku": "CB-001",
+    "name": "Circuit Board - A",
+    "category": "Electronics",
+    "warehouse": "Dallas",
+    "quantity": 42,
+    "reorder_point": 40,
+    "unit_cost": 18.5,
+    "supplier": "Northwind Components",
+    "lead_time_days": 19
+  },
+  {
+    "id": "INV-1002",
+    "sku": "SNS-020",
+    "name": "Sensor Module",
+    "category": "Sensors",
+    "warehouse": "Austin",
+    "quantity": 30,
+    "reorder_point": 30,
+    "unit_cost": 24.0,
+    "supplier": "Apex Sensors",
+    "lead_time_days": 7
+  },
+  {
+    "id": "INV-1003",
+    "sku": "ACT-909",
+    "name": "Linear Actuator",
+    "category": "Mechanical",
+    "warehouse": "Dallas",
+    "quantity": 12,
+    "reorder_point": 20,
+    "unit_cost": 95.0,
+    "supplier": "MechaMotive",
+    "lead_time_days": 22
+  },
+  {
+    "id": "INV-1004",
+    "sku": "PWR-404",
+    "name": "Power Supply 48V",
+    "category": "Power",
+    "warehouse": "Houston",
+    "quantity": 8,
+    "reorder_point": 10,
+    "unit_cost": 62.5,
+    "supplier": "GridLite Power",
+    "lead_time_days": 33
+  }
+]

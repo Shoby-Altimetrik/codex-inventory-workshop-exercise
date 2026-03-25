@@ -1,0 +1,7 @@
+[
+  {"month": "2026-01", "category": "procurement", "amount": 95000},
+  {"month": "2026-01", "category": "operational", "amount": 38000},
+  {"month": "2026-02", "category": "procurement", "amount": 87000},
+  {"month": "2026-02", "category": "labor", "amount": 42000},
+  {"month": "2026-03", "category": "overhead", "amount": 29000}
+]

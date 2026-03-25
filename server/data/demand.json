@@ -1,0 +1,6 @@
+[
+  {"sku": "CB-001", "current_month": 110, "forecast_next_month": 118, "trend": "increasing"},
+  {"sku": "SNS-020", "current_month": 80, "forecast_next_month": 82, "trend": "stable"},
+  {"sku": "ACT-909", "current_month": 42, "forecast_next_month": 39, "trend": "decreasing"},
+  {"sku": "PWR-404", "current_month": 36, "forecast_next_month": 36, "trend": "stable"}
+]

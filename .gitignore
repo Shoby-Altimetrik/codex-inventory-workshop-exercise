@@ -1,0 +1,8 @@
+node_modules/
+client/node_modules/
+client/dist/
+.pytest_cache/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store

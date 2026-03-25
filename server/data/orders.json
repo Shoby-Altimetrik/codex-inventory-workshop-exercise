@@ -1,0 +1,46 @@
+[
+  {
+    "id": "ORD-5001",
+    "warehouse": "Dallas",
+    "category": "Electronics",
+    "status": "Delivered",
+    "month": "2026-01",
+    "customer": "Blue River Manufacturing",
+    "items": [
+      {"sku": "CB-001", "quantity": 120, "unit_price": 31.0}
+    ]
+  },
+  {
+    "id": "ORD-5002",
+    "warehouse": "Austin",
+    "category": "Sensors",
+    "status": "Processing",
+    "month": "2026-02",
+    "customer": "Peak Robotics",
+    "items": [
+      {"sku": "SNS-020", "quantity": 75, "unit_price": 44.0}
+    ]
+  },
+  {
+    "id": "ORD-5003",
+    "warehouse": "Dallas",
+    "category": "Mechanical",
+    "status": "Backordered",
+    "month": "2026-02",
+    "customer": "Foundry Labs",
+    "items": [
+      {"sku": "ACT-909", "quantity": 20, "unit_price": 145.0}
+    ]
+  },
+  {
+    "id": "ORD-5004",
+    "warehouse": "Houston",
+    "category": "Power",
+    "status": "Shipped",
+    "month": "2026-03",
+    "customer": "Monarch Fabrication",
+    "items": [
+      {"sku": "PWR-404", "quantity": 32, "unit_price": 88.0}
+    ]
+  }
+]

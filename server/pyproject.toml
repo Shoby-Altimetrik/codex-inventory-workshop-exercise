@@ -1,0 +1,15 @@
+[project]
+name = "codex-inventory-workshop-server"
+version = "0.1.0"
+description = "Backend API for Codex workshop exercise"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0"
+]
+
+[tool.uv]
+dev-dependencies = [
+  "pytest>=8.3.0",
+  "httpx>=0.27.0"
+]
