@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codex Workshop Exercises</title>
+  <title>Altimetrik Codex Workshop Exercises</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
@@ -441,10 +441,10 @@
 <body>
   <div class="shell">
     <header class="hero">
-      <h1>Codex Workshop Exercises</h1>
+      <h1>Altimetrik Codex Workshop Exercises</h1>
       <p>
         A static, step-by-step exercise guide modeled after the Claude workshop flow,
-        adapted for OpenAI Codex. Complete each exercise in sequence, mark progress, and use
+        adapted for OpenAI Codex and tailored for Altimetrik teams. Complete each exercise in sequence, mark progress, and use
         App or CLI based on your preference.
       </p>
       <div class="hero-links">
@@ -459,10 +459,10 @@
     <div class="layout">
       <aside class="sidebar" id="sidebar">
         <h2>Workshop Steps</h2>
-        <div class="meta">7 exercises + debrief</div>
+        <div class="meta">8 exercises + debrief</div>
 
         <div class="progress">
-          <div><span id="progress-text">0 of 7 complete</span></div>
+          <div><span id="progress-text">0 of 8 complete</span></div>
           <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
 
@@ -474,6 +474,7 @@
           <li><a href="#ex5">Exercise 5 <small>Feature A: Supplier Risk</small></a></li>
           <li><a href="#ex6">Exercise 6 <small>Feature B: CSV Export</small></a></li>
           <li><a href="#ex7">Exercise 7 <small>Playwright Feature Validation</small></a></li>
+          <li><a href="#ex8">Exercise 8 <small>Screenshot Capture Final QA</small></a></li>
         </ul>
       </aside>
 
@@ -547,6 +548,14 @@ brew install --cask codex</code></pre>
           </div>
           <p class="goal">Goal: fix mismatch between <code>status</code> and <code>order_status</code>.</p>
 
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Fix Bug A: frontend sends status but backend expects order_status. Find the failing test, apply a minimal patch, and re-run affected tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
           <h4>Run tests</h4>
           <div class="snippet">
             <button class="copy-btn" data-copy="git checkout main\ncd client\nnpm test">Copy</button>
@@ -582,6 +591,14 @@ npm test</code></pre>
           </div>
           <p class="goal">Goal: update low-stock rule from <code>&lt;</code> to <code>&lt;=</code> reorder point.</p>
 
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Fix Bug B: low stock should include items where stock equals reorder_point. Update minimal backend logic and re-run regression tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
           <h4>Run regression checks</h4>
           <div class="snippet">
             <button class="copy-btn" data-copy="source .venv/bin/activate\ncd tests\npytest backend/test_bug_regressions.py -q">Copy</button>
@@ -616,6 +633,14 @@ pytest backend/test_bug_regressions.py -q</code></pre>
           </div>
           <p class="goal">Goal: align dashboard response field naming between API and UI.</p>
 
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Fix Bug C: total value field name drift between backend and UI. Keep contract stable, make minimal change, and re-run regression tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
           <h4>Tasks</h4>
           <ol>
             <li>Reproduce the mismatch around total value display.</li>
@@ -642,6 +667,14 @@ pytest backend/test_bug_regressions.py -q</code></pre>
             </div>
           </div>
           <p class="goal">Goal: implement risk endpoint and render supplier risk table in dashboard.</p>
+
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Implement Feature A end-to-end: add GET /api/risk/suppliers with warehouse/category filters and render supplier risk rows in dashboard. Add or update tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
 
           <h4>Contract</h4>
           <ul>
@@ -677,6 +710,14 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
           </div>
           <p class="goal">Goal: implement filter-aware CSV export and wire export interaction in UI.</p>
 
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Implement Feature B: add GET /api/orders/export.csv honoring active filters and wire Export CSV button in UI. Add or update tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
           <h4>Contract</h4>
           <ul>
             <li>Endpoint: <code>GET /api/orders/export.csv</code></li>
@@ -703,6 +744,14 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
             </div>
           </div>
           <p class="goal">Goal: add an Order Search input and validate real browser behavior with Playwright CLI skill flow.</p>
+
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Add Order Search UX in orders view (id, customer, status) and validate behavior with Playwright CLI snapshots and screenshots.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
 
           <h4>Feature to add</h4>
           <ul>
@@ -737,6 +786,64 @@ $PWCLI screenshot</code></pre>
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex7" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex8">
+          <div class="exercise-header">
+            <h3>Exercise 8: Screenshot Capture Skill - Final Visual QA</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Screenshot Skill</span>
+            </div>
+          </div>
+          <p class="goal">Goal: validate visually that all built features are present and correct using Screenshot Capture.</p>
+
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Run final visual QA with screenshot capture. Produce captures for KPI correctness, supplier risk table, order search, and export controls.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
+          <h4>Skill setup</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="export CODEX_HOME=&quot;${CODEX_HOME:-$HOME/.codex}&quot;\nexport SS_SKILL=&quot;$CODEX_HOME/skills/screenshot&quot;">Copy</button>
+            <pre><code>export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+export SS_SKILL="$CODEX_HOME/skills/screenshot"</code></pre>
+          </div>
+
+          <h4>macOS permission preflight</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="bash &quot;$SS_SKILL/scripts/ensure_macos_permissions.sh&quot;">Copy</button>
+            <pre><code>bash "$SS_SKILL/scripts/ensure_macos_permissions.sh"</code></pre>
+          </div>
+
+          <h4>Capture checklist</h4>
+          <ol>
+            <li>Dashboard with corrected KPI values visible.</li>
+            <li>Supplier risk table populated and readable.</li>
+            <li>Orders view with search filtering active.</li>
+            <li>Export CSV control visible in Orders view.</li>
+          </ol>
+
+          <h4>Capture commands</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="python3 &quot;$SS_SKILL/scripts/take_screenshot.py&quot; --mode temp --active-window\npython3 &quot;$SS_SKILL/scripts/take_screenshot.py&quot; --mode temp --app &quot;Google Chrome&quot;\nmkdir -p output/screenshots\npython3 &quot;$SS_SKILL/scripts/take_screenshot.py&quot; --path output/screenshots/final-validation.png">Copy</button>
+            <pre><code>python3 "$SS_SKILL/scripts/take_screenshot.py" --mode temp --active-window
+python3 "$SS_SKILL/scripts/take_screenshot.py" --mode temp --app "Google Chrome"
+mkdir -p output/screenshots
+python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-validation.png</code></pre>
+          </div>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Screenshots exist for all required validation states.</li>
+            <li>No obvious visual regressions or missing UI elements.</li>
+            <li>Artifacts are saved for instructor review.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex8" /> Mark exercise complete</div>
         </article>
 
         <section class="footer">

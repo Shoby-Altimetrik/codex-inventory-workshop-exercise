@@ -1,7 +1,7 @@
-# Codex Inventory Workshop Exercise
+# Altimetrik Codex Inventory Workshop Exercise
 
 ## Workshop Overview
-This workshop is designed to teach practical, repeatable workflows for using OpenAI Codex in a real codebase.
+This Altimetrik workshop is designed to teach practical, repeatable workflows for using OpenAI Codex in a real codebase.
 
 You will work through a full-stack app with:
 - Vue frontend (`client/`)
@@ -164,6 +164,18 @@ Goal: fix status filter mismatch between frontend and backend contracts.
 ### Problem
 Frontend sends `status`, while backend primarily uses `order_status`.
 
+### Codex setup for this exercise
+- Codex App path:
+  1. Open this repo in Codex App (or reuse the session from Exercise 1).
+  2. Use this prompt:
+     - `Fix Bug A: frontend sends status but backend expects order_status. Find the failing test, apply a minimal patch, and re-run affected tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
 ### Steps
 1. Checkout workshop baseline:
    ```bash
@@ -190,6 +202,18 @@ Goal: fix low-stock calculation logic.
 ### Problem
 Low-stock count uses `< reorder_point` instead of `<= reorder_point`.
 
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Fix Bug B: low stock should include items where stock equals reorder_point. Update minimal backend logic and re-run regression tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
 ### Steps
 1. Run backend regression tests:
    ```bash
@@ -213,6 +237,18 @@ Goal: align API payload with frontend expectations.
 ### Problem
 Dashboard response returns `total_value` while UI expects `totalValue`.
 
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Fix Bug C: total value field name drift between backend and UI. Keep contract stable, make minimal change, and re-run regression tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
 ### Steps
 1. Reproduce failing dashboard metric behavior.
 2. Use Codex to trace response contract.
@@ -227,6 +263,18 @@ Dashboard response returns `total_value` while UI expects `totalValue`.
 
 ## Exercise 5: Feature A - Supplier Lead Time Risk API + UI (10-20 minutes)
 Goal: implement a full-stack feature from endpoint to table rendering.
+
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Implement Feature A end-to-end: add GET /api/risk/suppliers with warehouse/category filters and render supplier risk rows in dashboard. Add/update tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
 
 ### Build
 - API endpoint: `GET /api/risk/suppliers?warehouse=&category=`
@@ -258,6 +306,18 @@ Goal: implement a full-stack feature from endpoint to table rendering.
 ## Exercise 6: Feature B - CSV Export for Filtered Orders (10-20 minutes)
 Goal: implement export functionality that honors active filters.
 
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Implement Feature B: add GET /api/orders/export.csv honoring active filters and wire Export CSV button in UI. Add/update tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
 ### Build
 - API endpoint: `GET /api/orders/export.csv`
 - Include filters: `warehouse`, `category`, `order_status`, `month`
@@ -278,6 +338,18 @@ Goal: implement export functionality that honors active filters.
 
 ## Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX (10-20 minutes)
 Goal: add a UI feature and validate it using the Playwright CLI skill workflow.
+
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Add Order Search UX in orders view (id, customer, status) and validate behavior with Playwright CLI snapshots and screenshots.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
 
 ### Feature to add
 Add a client-side `Order Search` input in the Orders section that filters visible orders by:
@@ -327,6 +399,66 @@ Recommended checks:
 
 ---
 
+## Exercise 8: Screenshot Capture Skill - Final Visual QA (10-20 minutes)
+Goal: use Screenshot Capture to visually validate that all built work is correct and present.
+
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Run final visual QA with screenshot capture. Produce captures for KPI correctness, supplier risk table, order search, and export controls.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
+### Why this exercise matters
+Automated tests and browser flows are necessary but still miss visual regressions. This step creates a repeatable visual QA pass for workshop deliverables.
+
+### Screenshot skill setup
+```bash
+export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+export SS_SKILL="$CODEX_HOME/skills/screenshot"
+```
+
+macOS permission preflight:
+```bash
+bash "$SS_SKILL/scripts/ensure_macos_permissions.sh"
+```
+
+### Validation checklist
+Capture screenshots for each required state:
+1. Dashboard with corrected KPI values (including total value).
+2. Supplier risk table visible with populated rows.
+3. Orders view with search input filtering results.
+4. Export CSV control visible in Orders view.
+
+### Example capture commands
+Capture the currently focused window to temp:
+```bash
+python3 "$SS_SKILL/scripts/take_screenshot.py" --mode temp --active-window
+```
+
+Capture a specific browser app window (macOS):
+```bash
+python3 "$SS_SKILL/scripts/take_screenshot.py" --mode temp --app "Google Chrome"
+```
+
+Capture to a saved artifacts folder:
+```bash
+mkdir -p output/screenshots
+python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-validation.png
+```
+
+### Acceptance criteria
+- Screenshots exist for all required validation states.
+- No obvious visual regressions (missing components, layout collapse, unreadable UI).
+- Evidence artifacts are saved for review.
+
+---
+
 ## Stretch Goals
 - Add deprecation warning support for `status` alias usage in backend logs.
 - Add loading and error states for all async dashboard sections.
@@ -352,4 +484,5 @@ Recommended checks:
 - Exercise 5: Feature A (supplier risk endpoint + UI). (10-20 minutes)
 - Exercise 6: Feature B (CSV export). (10-20 minutes)
 - Exercise 7: Playwright feature and validation. (10-20 minutes)
+- Exercise 8: Screenshot Capture final visual QA. (10-20 minutes)
 - Debrief and recap. (10-20 minutes)
