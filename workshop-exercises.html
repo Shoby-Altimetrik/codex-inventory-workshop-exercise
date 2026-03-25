@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codex Workshop Exercises</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fbf7f1;
+      --surface: #fffdf9;
+      --surface-2: #fff7eb;
+      --ink: #14233b;
+      --ink-soft: #48607b;
+      --line: #eadfce;
+      --accent: #f97316;
+      --accent-2: #0ea5a4;
+      --accent-3: #ea580c;
+      --ok: #15803d;
+      --shadow: 0 12px 28px rgba(20, 35, 59, 0.1);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      color: var(--ink);
+      background:
+        radial-gradient(1100px 650px at -10% -20%, rgba(14, 165, 164, 0.14), transparent 60%),
+        radial-gradient(900px 550px at 110% 0%, rgba(249, 115, 22, 0.16), transparent 60%),
+        var(--bg);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.55;
+      scroll-behavior: smooth;
+    }
+
+    .shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 28px 18px 36px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(130deg, #fffdf9 0%, #fff4e5 42%, #eefafa 100%);
+      box-shadow: var(--shadow);
+      padding: 30px 30px 26px;
+      margin-bottom: 18px;
+      animation: fade-up 0.55s ease both;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -90px -110px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(14, 165, 164, 0.2), transparent 66%);
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.65rem, 3.7vw, 2.6rem);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 10px 0 16px;
+      color: var(--ink-soft);
+      max-width: 850px;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-links a {
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background: #ffffffbd;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .hero-links a:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 280px) 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .mobile-nav-toggle {
+      display: none;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      animation: fade-up 0.65s ease both;
+    }
+
+    .sidebar h2 {
+      margin: 0 0 6px;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: 1rem;
+    }
+
+    .sidebar .meta {
+      color: var(--ink-soft);
+      font-size: 0.84rem;
+      margin-bottom: 10px;
+    }
+
+    .progress {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 9px 10px;
+      background: var(--surface-2);
+      margin-bottom: 12px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 8px;
+      background: #f2e8da;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 0.35s ease;
+    }
+
+    .nav-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      max-height: 62vh;
+      overflow: auto;
+    }
+
+    .nav-list a {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.86rem;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-list a small {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      margin-top: 2px;
+    }
+
+    .nav-list a:hover,
+    .nav-list a.active {
+      border-color: var(--line);
+      background: #fff8ec;
+    }
+
+    .content {
+      display: grid;
+      gap: 14px;
+    }
+
+    .exercise {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      animation: fade-up 0.55s ease both;
+    }
+
+    .exercise-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .exercise h3 {
+      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+      letter-spacing: -0.01em;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-radius: 999px;
+      padding: 5px 9px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .chip.time {
+      color: var(--accent-3);
+      border-color: #f9d8bf;
+      background: #fff4ea;
+    }
+
+    .chip.focus {
+      color: #0f766e;
+      border-color: #bae6e1;
+      background: #edfdfb;
+    }
+
+    .goal {
+      margin: 10px 0 14px;
+      color: var(--ink-soft);
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+
+    .exercise h4 {
+      margin: 14px 0 6px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #243750;
+    }
+
+    ul,
+    ol {
+      margin-top: 6px;
+      margin-bottom: 10px;
+      padding-left: 20px;
+    }
+
+    .checklist li {
+      margin-bottom: 6px;
+    }
+
+    .snippet {
+      position: relative;
+      border: 1px solid #d7dce8;
+      border-radius: var(--radius-sm);
+      background: #111827;
+      color: #f8fafc;
+      margin: 8px 0 12px;
+      overflow: hidden;
+    }
+
+    .snippet pre {
+      margin: 0;
+      padding: 12px 14px;
+      overflow-x: auto;
+      font-size: 0.84rem;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      line-height: 1.45;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      border: 1px solid #404e65;
+      background: #1f2937;
+      color: #e2e8f0;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      border-color: #6b7a93;
+    }
+
+    .mode-switch {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 3px;
+      gap: 4px;
+      margin: 6px 0 2px;
+    }
+
+    .mode-switch button {
+      border: 0;
+      background: transparent;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+
+    .mode-switch button.active {
+      background: linear-gradient(90deg, #fde3cc, #d8f8f5);
+      color: var(--ink);
+    }
+
+    .mode-panel {
+      display: none;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      margin-top: 8px;
+      background: #fffdfa;
+    }
+
+    .mode-panel.active {
+      display: block;
+    }
+
+    .done-row {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--line);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--ink-soft);
+    }
+
+    .done-row input {
+      inline-size: 18px;
+      block-size: 18px;
+      accent-color: var(--ok);
+      cursor: pointer;
+    }
+
+    .footer {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      background: var(--surface-2);
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        display: none;
+      }
+
+      .sidebar.open {
+        display: block;
+      }
+
+      .shell {
+        padding: 16px 12px 24px;
+      }
+
+      .hero {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <h1>Codex Workshop Exercises</h1>
+      <p>
+        A static, step-by-step exercise guide modeled after the Claude workshop flow,
+        adapted for OpenAI Codex. Complete each exercise in sequence, mark progress, and use
+        App or CLI based on your preference.
+      </p>
+      <div class="hero-links">
+        <a href="https://chatgpt.com/codex/get-started" target="_blank" rel="noopener noreferrer">Codex Get Started</a>
+        <a href="https://developers.openai.com/codex/app" target="_blank" rel="noopener noreferrer">Codex App Docs</a>
+        <a href="https://github.com/openai/codex" target="_blank" rel="noopener noreferrer">Codex CLI</a>
+      </div>
+    </header>
+
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle">Show Exercise Navigation</button>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar">
+        <h2>Workshop Steps</h2>
+        <div class="meta">7 exercises + debrief</div>
+
+        <div class="progress">
+          <div><span id="progress-text">0 of 7 complete</span></div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <ul class="nav-list" id="exercise-nav">
+          <li><a href="#ex1">Exercise 1 <small>Install Codex (App or CLI)</small></a></li>
+          <li><a href="#ex2">Exercise 2 <small>Bug A: Query Param Contract</small></a></li>
+          <li><a href="#ex3">Exercise 3 <small>Bug B: Low Stock Rule</small></a></li>
+          <li><a href="#ex4">Exercise 4 <small>Bug C: Response Field Drift</small></a></li>
+          <li><a href="#ex5">Exercise 5 <small>Feature A: Supplier Risk</small></a></li>
+          <li><a href="#ex6">Exercise 6 <small>Feature B: CSV Export</small></a></li>
+          <li><a href="#ex7">Exercise 7 <small>Playwright Feature Validation</small></a></li>
+        </ul>
+      </aside>
+
+      <main class="content">
+        <article class="exercise" id="ex1">
+          <div class="exercise-header">
+            <h3>Exercise 1: Install Codex and Connect the Project</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Onboarding</span>
+            </div>
+          </div>
+          <p class="goal">Goal: get every participant running Codex against the local repository.</p>
+
+          <h4>Choose your path</h4>
+          <div class="mode-switch" role="tablist" aria-label="Codex mode switch">
+            <button class="active" data-mode="app">Codex App</button>
+            <button data-mode="cli">Codex CLI</button>
+          </div>
+
+          <section class="mode-panel active" data-mode-panel="app">
+            <ol class="checklist">
+              <li>Open Codex App and sign in with ChatGPT.</li>
+              <li>Select this repository folder.</li>
+              <li>Run these orientation prompts:
+                <ul>
+                  <li><code>Summarize this repository structure.</code></li>
+                  <li><code>List the intentionally failing tests and what each one checks.</code></li>
+                  <li><code>Map dashboard summary data from backend to frontend.</code></li>
+                </ul>
+              </li>
+            </ol>
+          </section>
+
+          <section class="mode-panel" data-mode-panel="cli">
+            <ol class="checklist">
+              <li>Install CLI:
+                <div class="snippet">
+                  <button class="copy-btn" data-copy="npm install -g @openai/codex\n# or\nbrew install --cask codex">Copy</button>
+                  <pre><code>npm install -g @openai/codex
+# or
+brew install --cask codex</code></pre>
+                </div>
+              </li>
+              <li>Start Codex inside repo:
+                <div class="snippet">
+                  <button class="copy-btn" data-copy="codex">Copy</button>
+                  <pre><code>codex</code></pre>
+                </div>
+              </li>
+              <li>Sign in and run the same orientation prompts as App path.</li>
+            </ol>
+          </section>
+
+          <h4>Done when</h4>
+          <ul>
+            <li>Codex (App or CLI) can read local files accurately.</li>
+            <li>You can run prompts and get architecture-accurate answers.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex1" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex2">
+          <div class="exercise-header">
+            <h3>Exercise 2: Bug A - Query Parameter Contract</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Debugging</span>
+            </div>
+          </div>
+          <p class="goal">Goal: fix mismatch between <code>status</code> and <code>order_status</code>.</p>
+
+          <h4>Run tests</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="git checkout main\ncd client\nnpm test">Copy</button>
+            <pre><code>git checkout main
+cd client
+npm test</code></pre>
+          </div>
+
+          <h4>Tasks</h4>
+          <ol>
+            <li>Locate failing API contract test.</li>
+            <li>Use Codex to trace query building in frontend API calls.</li>
+            <li>Patch with minimal contract-preserving changes.</li>
+            <li>Re-run frontend tests and manually verify status filter behavior.</li>
+          </ol>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Frontend contract test passes for <code>order_status</code>.</li>
+            <li>Status filter returns correct order subsets.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex2" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex3">
+          <div class="exercise-header">
+            <h3>Exercise 3: Bug B - Low Stock Rule</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Business Logic</span>
+            </div>
+          </div>
+          <p class="goal">Goal: update low-stock rule from <code>&lt;</code> to <code>&lt;=</code> reorder point.</p>
+
+          <h4>Run regression checks</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="source .venv/bin/activate\ncd tests\npytest backend/test_bug_regressions.py -q">Copy</button>
+            <pre><code>source .venv/bin/activate
+cd tests
+pytest backend/test_bug_regressions.py -q</code></pre>
+          </div>
+
+          <h4>Tasks</h4>
+          <ol>
+            <li>Use Codex to locate low stock calculation in backend summary endpoint.</li>
+            <li>Patch the conditional to include equality case.</li>
+            <li>Re-run the regression file.</li>
+          </ol>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Items at reorder point are counted as low stock.</li>
+            <li>Bug B regression test passes.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex3" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex4">
+          <div class="exercise-header">
+            <h3>Exercise 4: Bug C - Response Field Naming Drift</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">API Contract</span>
+            </div>
+          </div>
+          <p class="goal">Goal: align dashboard response field naming between API and UI.</p>
+
+          <h4>Tasks</h4>
+          <ol>
+            <li>Reproduce the mismatch around total value display.</li>
+            <li>Use Codex to trace expected frontend field and backend payload key.</li>
+            <li>Apply a minimal fix with low blast radius.</li>
+            <li>Re-run frontend and backend bug tests.</li>
+          </ol>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Dashboard total value renders correctly.</li>
+            <li>Regression tests pass for naming contract.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex4" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex5">
+          <div class="exercise-header">
+            <h3>Exercise 5: Feature A - Supplier Lead Time Risk</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Feature Build</span>
+            </div>
+          </div>
+          <p class="goal">Goal: implement risk endpoint and render supplier risk table in dashboard.</p>
+
+          <h4>Contract</h4>
+          <ul>
+            <li>Endpoint: <code>GET /api/risk/suppliers?warehouse=&amp;category=</code></li>
+            <li>Row fields: <code>supplier</code>, <code>avg_lead_time_days</code>, <code>risk_level</code>, <code>affected_skus</code></li>
+          </ul>
+
+          <h4>Run feature tests</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="source .venv/bin/activate\ncd tests\npytest backend/test_feature_endpoints.py -q">Copy</button>
+            <pre><code>source .venv/bin/activate
+cd tests
+pytest backend/test_feature_endpoints.py -q</code></pre>
+          </div>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Endpoint returns 200 with a non-empty array.</li>
+            <li>Payload shape matches contract.</li>
+            <li>UI table renders and updates from API.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex5" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex6">
+          <div class="exercise-header">
+            <h3>Exercise 6: Feature B - CSV Export for Filtered Orders</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Feature Build</span>
+            </div>
+          </div>
+          <p class="goal">Goal: implement filter-aware CSV export and wire export interaction in UI.</p>
+
+          <h4>Contract</h4>
+          <ul>
+            <li>Endpoint: <code>GET /api/orders/export.csv</code></li>
+            <li>Must honor filters: <code>warehouse</code>, <code>category</code>, <code>order_status</code>, <code>month</code></li>
+            <li>UI <code>Export CSV</code> action must call export flow.</li>
+          </ul>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Response media type is <code>text/csv</code> with headers.</li>
+            <li>Rows match active filters.</li>
+            <li>Frontend export trigger test passes.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex6" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex7">
+          <div class="exercise-header">
+            <h3>Exercise 7: Playwright CLI Skill - Add and Validate Order Search</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Playwright Skill</span>
+            </div>
+          </div>
+          <p class="goal">Goal: add an Order Search input and validate real browser behavior with Playwright CLI skill flow.</p>
+
+          <h4>Feature to add</h4>
+          <ul>
+            <li>Add a search field in Orders list filtering by order id, customer, and status.</li>
+            <li>Filtering should update visible orders in real time.</li>
+          </ul>
+
+          <h4>Playwright CLI skill setup</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="command -v npx >/dev/null 2>&1\nexport CODEX_HOME=\"${CODEX_HOME:-$HOME/.codex}\"\nexport PWCLI=\"$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh\"">Copy</button>
+            <pre><code>command -v npx >/dev/null 2>&1
+export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+export PWCLI="$CODEX_HOME/skills/playwright/scripts/playwright_cli.sh"</code></pre>
+          </div>
+
+          <h4>Validation flow</h4>
+          <div class="snippet">
+            <button class="copy-btn" data-copy="$PWCLI open http://localhost:3000 --headed\n$PWCLI snapshot\n# use current snapshot refs\n$PWCLI type eX ORD-5002\n$PWCLI snapshot\n$PWCLI screenshot">Copy</button>
+            <pre><code>$PWCLI open http://localhost:3000 --headed
+$PWCLI snapshot
+# use current snapshot refs
+$PWCLI type eX ORD-5002
+$PWCLI snapshot
+$PWCLI screenshot</code></pre>
+          </div>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Search input exists and filters list correctly.</li>
+            <li>Clearing search restores full list.</li>
+            <li>Playwright flow verifies behavior with no regressions.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex7" /> Mark exercise complete</div>
+        </article>
+
+        <section class="footer">
+          <strong>Debrief (10-20 minutes):</strong>
+          Which prompts gave highest confidence? What did browser automation catch that unit tests missed?
+          What contract safeguards should be added before production?
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "codex_workshop_progress_v1";
+
+    const checkboxes = Array.from(document.querySelectorAll("input[data-exercise-id]"));
+    const progressText = document.getElementById("progress-text");
+    const progressFill = document.getElementById("progress-fill");
+    const navLinks = Array.from(document.querySelectorAll("#exercise-nav a"));
+    const mobileToggle = document.getElementById("mobile-nav-toggle");
+    const sidebar = document.getElementById("sidebar");
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveProgress(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function refreshProgress() {
+      const done = checkboxes.filter((cb) => cb.checked).length;
+      const total = checkboxes.length;
+      progressText.textContent = `${done} of ${total} complete`;
+      progressFill.style.width = `${(done / total) * 100}%`;
+    }
+
+    function initCheckboxes() {
+      const state = loadProgress();
+      checkboxes.forEach((cb) => {
+        const key = cb.dataset.exerciseId;
+        cb.checked = Boolean(state[key]);
+        cb.addEventListener("change", () => {
+          const next = loadProgress();
+          next[key] = cb.checked;
+          saveProgress(next);
+          refreshProgress();
+        });
+      });
+      refreshProgress();
+    }
+
+    function initModeSwitch() {
+      const buttons = Array.from(document.querySelectorAll(".mode-switch button"));
+      const panels = Array.from(document.querySelectorAll(".mode-panel"));
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const mode = button.dataset.mode;
+          buttons.forEach((b) => b.classList.toggle("active", b === button));
+          panels.forEach((panel) => {
+            panel.classList.toggle("active", panel.dataset.modePanel === mode);
+          });
+        });
+      });
+    }
+
+    function initCopyButtons() {
+      document.querySelectorAll(".copy-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const text = btn.dataset.copy || "";
+          try {
+            await navigator.clipboard.writeText(text);
+            const original = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(() => {
+              btn.textContent = original;
+            }, 900);
+          } catch {
+            btn.textContent = "Copy failed";
+            setTimeout(() => {
+              btn.textContent = "Copy";
+            }, 900);
+          }
+        });
+      });
+    }
+
+    function initScrollSpy() {
+      const sections = Array.from(document.querySelectorAll("main .exercise"));
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = `#${entry.target.id}`;
+            navLinks.forEach((link) => {
+              link.classList.toggle("active", link.getAttribute("href") === id);
+            });
+          });
+        },
+        { threshold: 0.45 }
+      );
+      sections.forEach((section) => observer.observe(section));
+    }
+
+    mobileToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+      mobileToggle.textContent = sidebar.classList.contains("open")
+        ? "Hide Exercise Navigation"
+        : "Show Exercise Navigation";
+    });
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 980) {
+          sidebar.classList.remove("open");
+          mobileToggle.textContent = "Show Exercise Navigation";
+        }
+      });
+    });
+
+    initCheckboxes();
+    initModeSwitch();
+    initCopyButtons();
+    initScrollSpy();
+  </script>
+</body>
+</html>
