@@ -35,6 +35,8 @@ By completion, participants can transfer these capabilities to their own codebas
 - Exercise 6: ship export/reporting behavior tied to live filter state.
 - Exercise 7: validate interactive UX behavior with browser automation.
 - Exercise 8: execute visual QA with reproducible screenshot evidence.
+- Exercise 9: design and deliver a stakeholder-facing operations dashboard slice.
+- Exercise 10: internationalize UI flows for multilingual team adoption.
 
 ---
 
@@ -511,6 +513,79 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
 
 ---
 
+## Exercise 9: Feature C - Add Operations Dashboard View (10-20 minutes)
+Goal: add a focused dashboard view that gives operations leaders a quick demand-vs-spend signal.
+
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Add an Operations Dashboard view using existing demand and spending APIs. Implement a concise KPI summary + supporting table/card section and add tests.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
+### Build
+- Add a new dashboard section (or routed view) for operations health.
+- Use existing backend endpoints:
+  - `GET /api/demand`
+  - `GET /api/spending`
+- Show at least:
+  - one computed KPI summary
+  - one supporting detail table/list
+  - one clear signal state (e.g., stable/increasing/decreasing)
+
+### Steps
+1. Define the UI contract for the operations dashboard section.
+2. Use Codex to implement data loading and derived KPI computation.
+3. Add render logic and any required component/test updates.
+4. Re-run frontend tests and manually verify the new section in browser.
+
+### Acceptance criteria
+- Operations dashboard section is visible and populated from live API data.
+- Derived KPI/signal values are deterministic for seeded data.
+- Frontend tests for the new dashboard behavior pass.
+
+---
+
+## Exercise 10: Feature D - Multilingual UI (English + Spanish) (10-20 minutes)
+Goal: make the workshop app usable in at least two languages with a clean translation pattern.
+
+### Codex setup for this exercise
+- Codex App path:
+  1. Reuse the same repo session in Codex App.
+  2. Use this prompt:
+     - `Add multilingual support (English and Spanish): language selector, translation dictionary, UI label wiring, and tests for language toggle behavior.`
+- Codex CLI path:
+  1. Start or return to Codex in this repo:
+     ```bash
+     codex
+     ```
+  2. Use the same prompt as the App path.
+
+### Build
+- Add a language selector in the UI (`en`, `es`).
+- Externalize visible UI strings into a translation map/object.
+- Persist selected language (for example in `localStorage`).
+- Default/fallback language should remain English.
+
+### Steps
+1. Identify all user-facing labels used in current app sections.
+2. Use Codex to create translation structure and selector wiring.
+3. Apply translations across dashboard, filters, and table headers.
+4. Add/update tests for language toggle and fallback behavior.
+
+### Acceptance criteria
+- Users can switch between English and Spanish at runtime.
+- Key labels update without a page reload.
+- Language preference persists across refresh.
+- Translation-related tests pass.
+
+---
+
 ## Stretch Goals
 - Add deprecation warning support for `status` alias usage in backend logs.
 - Add loading and error states for all async dashboard sections.
@@ -537,4 +612,6 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
 - Exercise 6: Feature B (CSV export). (10-20 minutes)
 - Exercise 7: Playwright feature and validation. (10-20 minutes)
 - Exercise 8: Screenshot Capture final visual QA. (10-20 minutes)
+- Exercise 9: operations dashboard view. (10-20 minutes)
+- Exercise 10: multilingual UI (English + Spanish). (10-20 minutes)
 - Debrief and recap. (10-20 minutes)

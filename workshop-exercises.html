@@ -493,10 +493,10 @@
     <div class="layout">
       <aside class="sidebar" id="sidebar">
         <h2>Workshop Steps</h2>
-        <div class="meta">8 exercises + debrief</div>
+        <div class="meta">10 exercises + debrief</div>
 
         <div class="progress">
-          <div><span id="progress-text">0 of 8 complete</span></div>
+          <div><span id="progress-text">0 of 10 complete</span></div>
           <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
 
@@ -509,6 +509,8 @@
           <li><a href="#ex6">Exercise 6 <small>Feature B: CSV Export</small></a></li>
           <li><a href="#ex7">Exercise 7 <small>Playwright Orders Search</small></a></li>
           <li><a href="#ex8">Exercise 8 <small>Screenshot Capture Final QA</small></a></li>
+          <li><a href="#ex9">Exercise 9 <small>Feature C: Operations Dashboard</small></a></li>
+          <li><a href="#ex10">Exercise 10 <small>Feature D: Multilingual UI</small></a></li>
         </ul>
       </aside>
 
@@ -528,7 +530,7 @@
               <ul>
                 <li>Exercises 1-2: codify repeatable setup and contract-drift debugging.</li>
                 <li>Exercises 3-4: run incident-style triage and stabilize KPI/API contracts.</li>
-                <li>Exercises 5-8: ship features, automate browser checks, and produce visual proof.</li>
+                <li>Exercises 5-10: ship features, automate QA, and expand product readiness.</li>
               </ul>
             </article>
           </div>
@@ -909,6 +911,93 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex8" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex9">
+          <div class="exercise-header">
+            <h3>Exercise 9: Feature C - Add Operations Dashboard View</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Feature Build</span>
+            </div>
+          </div>
+          <p class="goal">Goal: add an operations-focused dashboard view with demand-vs-spend insights.</p>
+
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Add an Operations Dashboard view using existing demand and spending APIs. Implement a concise KPI summary plus supporting table/card section and add tests.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
+          <h4>Build</h4>
+          <ul>
+            <li>Use existing endpoints: <code>GET /api/demand</code> and <code>GET /api/spending</code>.</li>
+            <li>Add one computed KPI summary and one supporting detail section.</li>
+            <li>Surface at least one clear signal state (for example: stable, increasing, decreasing).</li>
+          </ul>
+
+          <h4>Tasks</h4>
+          <ol>
+            <li>Define the operations dashboard UI contract (cards/table/list).</li>
+            <li>Implement data loading and derived KPI computation with Codex.</li>
+            <li>Add rendering logic and update tests for deterministic seeded-data behavior.</li>
+            <li>Re-run frontend tests and verify in browser.</li>
+          </ol>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Operations dashboard view/section is visible and populated from API data.</li>
+            <li>Derived KPI or signal values are deterministic for seeded data.</li>
+            <li>Frontend tests for the new dashboard behavior pass.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex9" /> Mark exercise complete</div>
+        </article>
+
+        <article class="exercise" id="ex10">
+          <div class="exercise-header">
+            <h3>Exercise 10: Feature D - Multilingual UI (English + Spanish)</h3>
+            <div class="chips">
+              <span class="chip time">10-20 minutes</span>
+              <span class="chip focus">Localization</span>
+            </div>
+          </div>
+          <p class="goal">Goal: make the UI multilingual with runtime language switching and persistence.</p>
+
+          <h4>Codex setup (App or CLI)</h4>
+          <ul>
+            <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
+              <code>Add multilingual support (English and Spanish): language selector, translation dictionary, UI label wiring, and tests for language toggle behavior.</code>
+            </li>
+            <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
+          <h4>Build</h4>
+          <ul>
+            <li>Add a language selector supporting <code>en</code> and <code>es</code>.</li>
+            <li>Move user-facing strings into a translation map/object.</li>
+            <li>Persist selected language and use English fallback behavior.</li>
+          </ul>
+
+          <h4>Tasks</h4>
+          <ol>
+            <li>Identify all visible labels in dashboard, filters, and table headers.</li>
+            <li>Implement translation mapping and selector wiring with Codex.</li>
+            <li>Apply translations across key UI surfaces.</li>
+            <li>Add/update tests for toggle behavior and fallback.</li>
+          </ol>
+
+          <h4>Acceptance criteria</h4>
+          <ul>
+            <li>Users can switch between English and Spanish at runtime.</li>
+            <li>Key labels update without a full page reload.</li>
+            <li>Selected language persists after refresh.</li>
+            <li>Translation-related tests pass.</li>
+          </ul>
+
+          <div class="done-row"><input type="checkbox" data-exercise-id="ex10" /> Mark exercise complete</div>
         </article>
 
         <section class="footer">

@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parents[1]
 README_PATH = ROOT_DIR / "README.md"
 HTML_PATH = ROOT_DIR / "workshop-exercises.html"
-EXPECTED_EXERCISE_COUNT = 8
+EXPECTED_EXERCISE_COUNT = 10
 
 
 @dataclass
