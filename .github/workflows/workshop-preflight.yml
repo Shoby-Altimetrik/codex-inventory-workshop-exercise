@@ -1,0 +1,38 @@
+name: Workshop Preflight
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install backend dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r server/requirements.txt
+          pip install pytest httpx
+
+      - name: Install frontend dependencies
+        run: npm ci --prefix client
+
+      - name: Validate README/HTML guide sync
+        run: python3 scripts/validate_guide_sync.py
+
+      - name: Verify baseline intentional failures
+        run: ./scripts/verify_workshop_state.sh --mode baseline

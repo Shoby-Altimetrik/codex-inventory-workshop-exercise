@@ -217,6 +217,41 @@
       gap: 14px;
     }
 
+    .briefing {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      animation: fade-up 0.5s ease both;
+    }
+
+    .brief-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .brief-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-2);
+      padding: 12px;
+    }
+
+    .brief-card h3 {
+      margin: 0 0 8px;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: 1rem;
+    }
+
+    .brief-card ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+
     .exercise {
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
@@ -443,9 +478,8 @@
     <header class="hero">
       <h1>Altimetrik Codex Workshop Exercises</h1>
       <p>
-        A static, step-by-step exercise guide modeled after the Claude workshop flow,
-        adapted for OpenAI Codex and tailored for Altimetrik teams. Complete each exercise in sequence, mark progress, and use
-        App or CLI based on your preference.
+        A static, step-by-step workshop guide tailored for Altimetrik teams using OpenAI Codex.
+        Complete each exercise in sequence, mark progress, and use App or CLI based on your preference.
       </p>
       <div class="hero-links">
         <a href="https://chatgpt.com/codex/get-started" target="_blank" rel="noopener noreferrer">Codex Get Started</a>
@@ -468,20 +502,41 @@
 
         <ul class="nav-list" id="exercise-nav">
           <li><a href="#ex1">Exercise 1 <small>Install Codex (App or CLI)</small></a></li>
-          <li><a href="#ex2">Exercise 2 <small>Bug A: Query Param Contract</small></a></li>
-          <li><a href="#ex3">Exercise 3 <small>Bug B: Low Stock Rule</small></a></li>
-          <li><a href="#ex4">Exercise 4 <small>Bug C: Response Field Drift</small></a></li>
-          <li><a href="#ex5">Exercise 5 <small>Feature A: Supplier Risk</small></a></li>
+          <li><a href="#ex2">Exercise 2 <small>Bug Fix A: Query Param Contract</small></a></li>
+          <li><a href="#ex3">Exercise 3 <small>Incident: Low-Stock KPI</small></a></li>
+          <li><a href="#ex4">Exercise 4 <small>Bug Fix C: Field Drift</small></a></li>
+          <li><a href="#ex5">Exercise 5 <small>Feature A: Supplier Risk API + UI</small></a></li>
           <li><a href="#ex6">Exercise 6 <small>Feature B: CSV Export</small></a></li>
-          <li><a href="#ex7">Exercise 7 <small>Playwright Feature Validation</small></a></li>
+          <li><a href="#ex7">Exercise 7 <small>Playwright Orders Search</small></a></li>
           <li><a href="#ex8">Exercise 8 <small>Screenshot Capture Final QA</small></a></li>
         </ul>
       </aside>
 
       <main class="content">
+        <section class="briefing">
+          <div class="brief-grid">
+            <article class="brief-card">
+              <h3>Why Codex Here</h3>
+              <ul>
+                <li>Trace issues across frontend, backend, and tests in one loop.</li>
+                <li>Generate constrained diffs with minimal blast radius.</li>
+                <li>Close the loop with test verification plus browser and visual QA.</li>
+              </ul>
+            </article>
+            <article class="brief-card">
+              <h3>Client Outcomes</h3>
+              <ul>
+                <li>Exercises 1-2: codify repeatable setup and contract-drift debugging.</li>
+                <li>Exercises 3-4: run incident-style triage and stabilize KPI/API contracts.</li>
+                <li>Exercises 5-8: ship features, automate browser checks, and produce visual proof.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
         <article class="exercise" id="ex1">
           <div class="exercise-header">
-            <h3>Exercise 1: Install Codex and Connect the Project</h3>
+            <h3>Exercise 1: Install Codex (App or CLI) and Connect Project</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Onboarding</span>
@@ -529,7 +584,7 @@ brew install --cask codex</code></pre>
             </ol>
           </section>
 
-          <h4>Done when</h4>
+          <h4>Acceptance criteria</h4>
           <ul>
             <li>Codex (App or CLI) can read local files accurately.</li>
             <li>You can run prompts and get architecture-accurate answers.</li>
@@ -540,7 +595,7 @@ brew install --cask codex</code></pre>
 
         <article class="exercise" id="ex2">
           <div class="exercise-header">
-            <h3>Exercise 2: Bug A - Query Parameter Contract</h3>
+            <h3>Exercise 2: Bug Fix A - Query Parameter Contract</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Debugging</span>
@@ -558,8 +613,8 @@ brew install --cask codex</code></pre>
 
           <h4>Run tests</h4>
           <div class="snippet">
-            <button class="copy-btn" data-copy="git checkout main\ncd client\nnpm test">Copy</button>
-            <pre><code>git checkout main
+            <button class="copy-btn" data-copy="./scripts/reset_workshop_state.sh --yes\ncd client\nnpm test">Copy</button>
+            <pre><code>./scripts/reset_workshop_state.sh --yes
 cd client
 npm test</code></pre>
           </div>
@@ -583,20 +638,27 @@ npm test</code></pre>
 
         <article class="exercise" id="ex3">
           <div class="exercise-header">
-            <h3>Exercise 3: Bug B - Low Stock Rule</h3>
+            <h3>Exercise 3: Incident Response - Low Stock KPI Mismatch</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
-              <span class="chip focus">Business Logic</span>
+              <span class="chip focus">Incident Response</span>
             </div>
           </div>
-          <p class="goal">Goal: update low-stock rule from <code>&lt;</code> to <code>&lt;=</code> reorder point.</p>
+          <p class="goal">Goal: triage and resolve a production-style KPI mismatch affecting planning decisions.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
             <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
-              <code>Fix Bug B: low stock should include items where stock equals reorder_point. Update minimal backend logic and re-run regression tests.</code>
+              <code>Treat this as incident response: validate low-stock KPI mismatch evidence, apply minimal fix for reorder-point equality, rerun regressions, and summarize RCA.</code>
             </li>
             <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
+          </ul>
+
+          <h4>Incident brief</h4>
+          <ul>
+            <li>Planning report understated low-stock exposure for procurement review.</li>
+            <li>Open incident packet: <code>docs/incidents/INC-2026-03-low-stock-kpi.md</code>.</li>
+            <li>Working hypothesis: equality at reorder point is excluded from KPI count.</li>
           </ul>
 
           <h4>Run regression checks</h4>
@@ -609,15 +671,18 @@ pytest backend/test_bug_regressions.py -q</code></pre>
 
           <h4>Tasks</h4>
           <ol>
-            <li>Use Codex to locate low stock calculation in backend summary endpoint.</li>
+            <li>Confirm symptom and impacted KPI from incident packet and tests.</li>
+            <li>Use Codex to locate low-stock calculation in backend summary endpoint.</li>
             <li>Patch the conditional to include equality case.</li>
             <li>Re-run the regression file.</li>
+            <li>Add a short RCA note to <code>output/incident-rca.md</code> (3-5 bullets).</li>
           </ol>
 
           <h4>Acceptance criteria</h4>
           <ul>
             <li>Items at reorder point are counted as low stock.</li>
-            <li>Bug B regression test passes.</li>
+            <li>Backend regression for this KPI incident passes.</li>
+            <li><code>output/incident-rca.md</code> documents root cause and mitigation.</li>
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex3" /> Mark exercise complete</div>
@@ -625,7 +690,7 @@ pytest backend/test_bug_regressions.py -q</code></pre>
 
         <article class="exercise" id="ex4">
           <div class="exercise-header">
-            <h3>Exercise 4: Bug C - Response Field Naming Drift</h3>
+            <h3>Exercise 4: Bug Fix C - Response Field Naming Drift</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">API Contract</span>
@@ -660,7 +725,7 @@ pytest backend/test_bug_regressions.py -q</code></pre>
 
         <article class="exercise" id="ex5">
           <div class="exercise-header">
-            <h3>Exercise 5: Feature A - Supplier Lead Time Risk</h3>
+            <h3>Exercise 5: Feature A - Supplier Lead Time Risk API + UI</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Feature Build</span>
@@ -737,7 +802,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
 
         <article class="exercise" id="ex7">
           <div class="exercise-header">
-            <h3>Exercise 7: Playwright CLI Skill - Add and Validate Order Search</h3>
+            <h3>Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Playwright Skill</span>

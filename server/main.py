@@ -119,7 +119,7 @@ def get_supplier_risk(
     return JSONResponse(status_code=501, content={"detail": "Not implemented yet"})
 
 
-@app.get("/api/orders/export.csv")
+@app.get("/api/orders/export.csv", response_model=None)
 def export_orders_csv(
     warehouse: str | None = Query(default=None),
     category: str | None = Query(default=None),

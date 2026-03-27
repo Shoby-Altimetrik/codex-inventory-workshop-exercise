@@ -14,9 +14,27 @@ Workshop goals:
 3. Use Codex to add net-new functionality with test validation.
 4. Use Playwright CLI skill to validate and iterate on a UI feature.
 
-Recommended branch strategy:
-- Start on `main` for workshop exercises.
-- Use feature branches for participant submissions or instructor review.
+Workshop baseline model:
+- `main` is the canonical workshop baseline (intentionally failing in expected places).
+- Use `./scripts/reset_workshop_state.sh --yes` before each delivery run.
+- Use `./scripts/verify_workshop_state.sh --mode baseline` to confirm expected baseline behavior.
+
+## Why Codex Here
+- Full-stack tracing from UI to API to tests in one loop.
+- Constrained patch generation focused on minimal blast radius.
+- Verification-first workflow with automated tests plus Playwright and screenshot validation.
+- Practical operator controls for repeatable workshop delivery.
+
+## Client Outcomes
+By completion, participants can transfer these capabilities to their own codebases:
+- Exercise 1: stand up Codex App/CLI workflow against a local repo.
+- Exercise 2: diagnose and fix frontend/backend query-contract drift safely.
+- Exercise 3: run incident-style KPI triage, implement a fix, and document RCA.
+- Exercise 4: stabilize naming contracts across service and UI layers.
+- Exercise 5: implement a scoped API + UI feature with acceptance-driven tests.
+- Exercise 6: ship export/reporting behavior tied to live filter state.
+- Exercise 7: validate interactive UX behavior with browser automation.
+- Exercise 8: execute visual QA with reproducible screenshot evidence.
 
 ---
 
@@ -91,6 +109,36 @@ cd client
 npm test
 ```
 
+### Workshop baseline controls
+Reset to canonical baseline:
+```bash
+./scripts/reset_workshop_state.sh --yes
+```
+
+Verify baseline (intentional failures only):
+```bash
+./scripts/verify_workshop_state.sh --mode baseline
+```
+
+Verify solved state (all tests green after workshop completion):
+```bash
+./scripts/verify_workshop_state.sh --mode solved
+```
+
+Validate README/HTML alignment:
+```bash
+python3 scripts/validate_guide_sync.py
+```
+
+Delivery preflight checklist:
+- Run `python3 scripts/validate_guide_sync.py`.
+- Run `./scripts/verify_workshop_state.sh --mode baseline`.
+- Confirm repo is clean (`git status --short`).
+- Confirm app boot commands still use `localhost:3000` and `localhost:8001`.
+
+CI coverage:
+- `.github/workflows/workshop-preflight.yml` runs guide sync validation and baseline verification on push/PR.
+
 ---
 
 ## Codex Workflow Primer
@@ -151,7 +199,7 @@ Official guides:
 3. Sign in with ChatGPT (recommended) or API key.
 4. Run the same three orientation prompts from Option A.
 
-### Done when
+### Acceptance criteria
 - Participant can run Codex via App or CLI.
 - Codex returns accurate file paths and behavior summary.
 - Participant can issue prompts and iterate in local mode.
@@ -177,9 +225,9 @@ Frontend sends `status`, while backend primarily uses `order_status`.
   2. Use the same prompt as the App path.
 
 ### Steps
-1. Checkout workshop baseline:
+1. Reset to workshop baseline:
    ```bash
-   git checkout main
+   ./scripts/reset_workshop_state.sh --yes
    ```
 2. Run frontend tests:
    ```bash
@@ -196,17 +244,19 @@ Frontend sends `status`, while backend primarily uses `order_status`.
 
 ---
 
-## Exercise 3: Bug Fix B - Low Stock Business Rule (10-20 minutes)
-Goal: fix low-stock calculation logic.
+## Exercise 3: Incident Response - Low Stock KPI Mismatch (10-20 minutes)
+Goal: triage and resolve a production-style KPI mismatch affecting planning decisions.
 
-### Problem
-Low-stock count uses `< reorder_point` instead of `<= reorder_point`.
+### Incident brief
+- A planning report understated low-stock exposure and triggered a data-quality escalation.
+- See incident packet: `docs/incidents/INC-2026-03-low-stock-kpi.md`.
+- Working hypothesis: low-stock logic uses `< reorder_point` instead of `<= reorder_point`.
 
 ### Codex setup for this exercise
 - Codex App path:
   1. Reuse the same repo session in Codex App.
   2. Use this prompt:
-     - `Fix Bug B: low stock should include items where stock equals reorder_point. Update minimal backend logic and re-run regression tests.`
+     - `Treat this as incident response: validate low-stock KPI mismatch evidence, apply minimal fix for reorder-point equality, rerun regressions, and summarize RCA.`
 - Codex CLI path:
   1. Start or return to Codex in this repo:
      ```bash
@@ -215,19 +265,21 @@ Low-stock count uses `< reorder_point` instead of `<= reorder_point`.
   2. Use the same prompt as the App path.
 
 ### Steps
-1. Run backend regression tests:
+1. Read incident packet and identify impacted KPI behavior.
+2. Run backend regression tests:
    ```bash
    source .venv/bin/activate
    cd tests
    pytest backend/test_bug_regressions.py -q
    ```
-2. Use Codex to locate low-stock calculation.
-3. Apply minimal fix.
-4. Re-run test file.
+3. Use Codex to locate low-stock calculation and patch with minimal blast radius.
+4. Re-run regression tests and confirm KPI correction.
+5. Capture a short RCA + mitigation note (3-5 bullets) in `output/incident-rca.md`.
 
 ### Acceptance criteria
 - `lowStockCount` includes items exactly at reorder point.
-- Backend regression test for Bug B passes.
+- Backend regression test for this KPI incident passes.
+- `output/incident-rca.md` exists with root cause + mitigation bullets.
 
 ---
 
@@ -479,7 +531,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
 ## Agenda (10-20 Minutes Per Segment)
 - Exercise 1: install Codex (App or CLI) and connect local project. (10-20 minutes)
 - Exercise 2: Bug Fix A (`status` vs `order_status`). (10-20 minutes)
-- Exercise 3: Bug Fix B (low stock rule). (10-20 minutes)
+- Exercise 3: incident response for low-stock KPI mismatch. (10-20 minutes)
 - Exercise 4: Bug Fix C (`total_value` vs `totalValue`). (10-20 minutes)
 - Exercise 5: Feature A (supplier risk endpoint + UI). (10-20 minutes)
 - Exercise 6: Feature B (CSV export). (10-20 minutes)
