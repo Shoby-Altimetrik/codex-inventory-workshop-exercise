@@ -10,19 +10,24 @@ You will work through a full-stack app with:
 
 Workshop goals:
 1. Install and configure Codex successfully (App or CLI).
-2. Use Codex to diagnose and fix real defects.
-3. Use Codex to add net-new functionality with test validation.
-4. Use Playwright CLI skill to validate and iterate on a UI feature.
+2. Establish durable repo context and a repeatable verification loop.
+3. Use Codex to diagnose and fix real defects.
+4. Use Codex to add net-new functionality with spec-first validation.
+5. Use skills, MCP-style tooling, and review workflows intentionally.
 
 Workshop baseline model:
 - `main` is the canonical workshop baseline (intentionally failing in expected places).
+- Do workshop-development and facilitator improvements on a review branch, not on `main`.
 - Use `./scripts/reset_workshop_state.sh --yes` before each delivery run.
 - Use `./scripts/verify_workshop_state.sh --mode baseline` to confirm expected baseline behavior.
 
 ## Why Codex Here
 - Full-stack tracing from UI to API to tests in one loop.
 - Constrained patch generation focused on minimal blast radius.
-- Verification-first workflow with automated tests plus Playwright and screenshot validation.
+- Repo-native instructions via [`AGENTS.md`](AGENTS.md) keep project context visible to Codex.
+- Verification-first workflow combines tests, browser checks, and screenshot evidence.
+- Skills and MCP-style tooling make it easy to show when Codex should reach beyond local file edits.
+- Review branches keep facilitator improvements separate from the workshop baseline.
 - Practical operator controls for repeatable workshop delivery.
 
 ## Client Outcomes
@@ -43,10 +48,12 @@ By completion, participants can transfer these capabilities to their own codebas
 ## Learning Objectives
 By the end of the workshop, participants should be able to:
 - Install Codex (App or CLI) and connect it to a local repository.
+- Establish project context with repo instructions and artifact templates.
 - Prompt Codex to map architecture, identify failure roots, and generate targeted diffs.
+- Create or approve a short spec before implementing a feature.
 - Resolve backend/frontend contract drift safely.
 - Add backend and frontend features from acceptance criteria.
-- Validate behavior with automated tests and browser automation.
+- Validate behavior with automated tests, browser automation, and visual evidence.
 
 ---
 
@@ -57,6 +64,11 @@ By the end of the workshop, participants should be able to:
 - Python 3.11+
 - `pip` (or `uv`)
 - ChatGPT sign-in or OpenAI API key for Codex authentication
+
+Important note for macOS participants:
+- The system `python3` command may still point to Python 3.9.
+- This workshop uses Python 3.11+ syntax in the FastAPI app.
+- If baseline verification fails before tests run, check `python --version` inside `.venv`.
 
 ### Clone and install dependencies
 ```bash
@@ -76,6 +88,13 @@ npm install
 cd ..
 ```
 
+### Create a review branch
+Keep your work isolated so the workshop baseline remains reviewable.
+
+```bash
+git checkout -b codex/<your-workshop-branch>
+```
+
 ### Run the app
 Use two terminals.
 
@@ -90,6 +109,11 @@ Terminal 2 (frontend):
 ```bash
 cd client
 npm run dev
+```
+
+Or use the helper script:
+```bash
+./scripts/start.sh
 ```
 
 ### Local URLs
@@ -150,28 +174,53 @@ Use this loop in every exercise.
 - Ask Codex for relevant files and data flow first.
 - Example: `Trace order_status from UI controls to backend query filtering.`
 
-2. Reproduce
+2. Set context
+- Inspect [`AGENTS.md`](AGENTS.md) before substantial changes.
+- Keep workshop deliverables in `output/`.
+- Call out whether you are preserving the baseline or implementing the exercise.
+
+3. Reproduce
 - Run tests or UI flow and capture exact failure output.
 
-3. Constrain
+4. Plan
+- For feature work, create or approve a short spec before editing.
+- Use [`output/spec.md`](output/spec.md) when the exercise asks for a design artifact.
+
+5. Constrain
 - Ask for smallest viable fix with no unrelated refactors.
 
-4. Verify
+6. Verify
 - Re-run tests immediately.
 - Re-check manual behavior in browser.
+- Save screenshots or notes when the exercise asks for proof.
 
-5. Summarize
+7. Summarize
 - Ask Codex for a short changelog, risks, and follow-up hardening ideas.
 
 Prompt patterns:
 - `Find root cause from this failing test output and propose a minimal patch.`
+- `Before coding, draft a concise implementation plan and acceptance criteria.`
 - `Keep API contract stable and update only what is needed.`
 - `Add or update tests first, then implement.`
+
+## Project Context + Artifacts
+Codex works best when the repo carries its own instructions and expected outputs.
+
+- [`AGENTS.md`](AGENTS.md): shared project guidance for Codex sessions
+- [`output/architecture-overview.md`](output/architecture-overview.md): early repo-understanding artifact
+- [`output/spec.md`](output/spec.md): plan-first feature artifact
+- [`output/incident-rca.md`](output/incident-rca.md): incident response artifact
+- [`output/screenshots/`](output/screenshots/): visual QA evidence
+
+Additional workshop support docs:
+- [`docs/codex/mcp-playwright.md`](docs/codex/mcp-playwright.md)
+- [`docs/codex/secrets-and-config.md`](docs/codex/secrets-and-config.md)
+- [`docs/codex/review-workflow.md`](docs/codex/review-workflow.md)
 
 ---
 
 ## Exercise 1: Install Codex (App or CLI) and Connect Project (10-20 minutes)
-Goal: everyone can run Codex locally against this repository using either UI or terminal workflow.
+Goal: connect Codex to the repo, create an isolated review branch, establish repo context, and generate an early architecture artifact.
 
 Official guides:
 - ChatGPT Codex get-started: [https://chatgpt.com/codex/get-started](https://chatgpt.com/codex/get-started)
@@ -181,10 +230,16 @@ Official guides:
 ### Option A: Codex App path
 1. Open Codex app and sign in with your ChatGPT account.
 2. Select this local folder/repository.
-3. Kick off your first task prompt.
-4. Run these orientation prompts:
-   - `Summarize repository structure.`
-   - `List intentionally failing tests and their purpose.`
+3. Create a review branch in your terminal:
+   ```bash
+   git checkout -b codex/<your-workshop-branch>
+   ```
+4. Kick off your first task prompt.
+5. Run these orientation prompts:
+   - `Read AGENTS.md and summarize the project rules I should follow.`
+   - `Create an architecture overview of this repository and save it to output/architecture-overview.md.`
+   - `Tell me which tests are intentionally failing on the workshop baseline and why.`
+   - `Start the backend and frontend locally and tell me how to verify they are running.`
    - `Map dashboard summary data from backend to UI.`
 
 ### Option B: Codex CLI path
@@ -199,11 +254,21 @@ Official guides:
    codex
    ```
 3. Sign in with ChatGPT (recommended) or API key.
-4. Run the same three orientation prompts from Option A.
+4. Create a review branch:
+   ```bash
+   git checkout -b codex/<your-workshop-branch>
+   ```
+5. Run the same orientation prompts from Option A.
+
+### Expected outputs
+- Review branch exists and is not `main`.
+- `output/architecture-overview.md` is updated with a repo map and main flows.
+- Participant can explain how the app starts and how the intentional baseline works.
 
 ### Acceptance criteria
 - Participant can run Codex via App or CLI.
-- Codex returns accurate file paths and behavior summary.
+- Codex returns accurate file paths, constraints, and architecture summary.
+- Participant has a review branch plus an architecture artifact.
 - Participant can issue prompts and iterate in local mode.
 
 ---
@@ -318,11 +383,18 @@ Dashboard response returns `total_value` while UI expects `totalValue`.
 ## Exercise 5: Feature A - Supplier Lead Time Risk API + UI (10-20 minutes)
 Goal: implement a full-stack feature from endpoint to table rendering.
 
+### Plan-first artifact
+Before implementing, create or update [`output/spec.md`](output/spec.md) with:
+- the problem statement
+- acceptance criteria
+- backend/frontend/test changes
+- verification plan
+
 ### Codex setup for this exercise
 - Codex App path:
   1. Reuse the same repo session in Codex App.
   2. Use this prompt:
-     - `Implement Feature A end-to-end: add GET /api/risk/suppliers with warehouse/category filters and render supplier risk rows in dashboard. Add/update tests.`
+     - `Before coding, draft a concise spec in output/spec.md for Feature A. Then implement GET /api/risk/suppliers with warehouse/category filters, render supplier risk rows in dashboard, and update tests.`
 - Codex CLI path:
   1. Start or return to Codex in this repo:
      ```bash
@@ -346,14 +418,16 @@ Goal: implement a full-stack feature from endpoint to table rendering.
    cd tests
    pytest backend/test_feature_endpoints.py -q
    ```
-2. Use Codex to implement backend aggregation and risk bucketing.
-3. Update frontend fetch/render behavior.
-4. Re-run backend + frontend tests.
+2. Draft or approve `output/spec.md`.
+3. Use Codex to implement backend aggregation and risk bucketing.
+4. Update frontend fetch/render behavior.
+5. Re-run backend + frontend tests.
 
 ### Acceptance criteria
 - Endpoint returns `200` and non-empty array.
 - Payload matches required shape.
 - Supplier risk table renders in dashboard.
+- `output/spec.md` reflects the accepted implementation plan.
 
 ---
 
@@ -389,6 +463,23 @@ Goal: implement export functionality that honors active filters.
 - Export trigger test passes.
 
 ---
+
+## Skills Primer
+Skills are reusable task guides that help Codex apply a workflow consistently. In this workshop:
+
+- the repo ships a sample skill at [`.codex/skills/workshop-evidence/SKILL.md`](.codex/skills/workshop-evidence/SKILL.md)
+- Exercises 7-8 use skills to make QA and evidence capture repeatable
+- the lesson is not “use more instructions”; it is “package a useful workflow once and reuse it”
+
+Try this prompt before Exercise 7:
+- `Read .codex/skills/workshop-evidence/SKILL.md and explain when this skill should be used in this repo.`
+
+## MCP Primer
+Model Context Protocol (MCP) gives Codex access to tools beyond local file editing. In this workshop, browser automation is the key example because it validates interactive behavior that unit tests may not fully capture.
+
+- primer doc: [`docs/codex/mcp-playwright.md`](docs/codex/mcp-playwright.md)
+- use browser tooling when the problem is interactive
+- keep tool usage evidence-driven: snapshots, screenshots, and concise verification notes
 
 ## Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX (10-20 minutes)
 Goal: add a UI feature and validate it using the Playwright CLI skill workflow.
@@ -445,10 +536,12 @@ Recommended checks:
 - Searching `ORD-5002` leaves only that order visible.
 - Clearing search restores full list.
 - Existing Apply Filters behavior still works after adding search.
+- Save browser notes, snapshots, or screenshots under `output/playwright/` when possible.
 
 ### Acceptance criteria
 - New search input exists and filters orders in real time.
 - Behavior validated manually and with Playwright CLI interaction.
+- Browser evidence is saved or summarized for review.
 - No existing tests regress.
 
 ---
@@ -488,6 +581,7 @@ Capture screenshots for each required state:
 2. Supplier risk table visible with populated rows.
 3. Orders view with search input filtering results.
 4. Export CSV control visible in Orders view.
+5. Optional: add a short handoff note using `docs/templates/reviewer-summary-template.md`.
 
 ### Example capture commands
 Capture the currently focused window to temp:
@@ -513,8 +607,22 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
 
 ---
 
+## Review And Advanced Workflows
+By this point, participants should be able to package work for review without touching the workshop baseline on `main`.
+
+Review workflow notes:
+- keep changes on a review branch
+- summarize what remains intentionally broken
+- separate baseline hardening from curriculum/content edits when possible
+- use [`docs/templates/reviewer-summary-template.md`](docs/templates/reviewer-summary-template.md) as a reviewer checklist
+
+Optional advanced follow-ons:
+- isolated branches or git worktrees for experimentation
+- parallel agent investigation on bounded tasks
+- future GitHub review automation once the core workshop flow is approved
+
 ## Exercise 9: Feature C - Add Operations Dashboard View (10-20 minutes)
-Goal: add a focused dashboard view that gives operations leaders a quick demand-vs-spend signal.
+Goal: add a focused dashboard view that gives operations leaders a quick demand-vs-spend signal. Optional follow-on exercise for this delivery phase.
 
 ### Codex setup for this exercise
 - Codex App path:
@@ -552,7 +660,7 @@ Goal: add a focused dashboard view that gives operations leaders a quick demand-
 ---
 
 ## Exercise 10: Feature D - Multilingual UI (English + Spanish) (10-20 minutes)
-Goal: make the workshop app usable in at least two languages with a clean translation pattern.
+Goal: make the workshop app usable in at least two languages with a clean translation pattern. Optional follow-on exercise for this delivery phase.
 
 ### Codex setup for this exercise
 - Codex App path:
@@ -587,6 +695,7 @@ Goal: make the workshop app usable in at least two languages with a clean transl
 ---
 
 ## Stretch Goals
+- Use a git worktree or isolated branch to prototype an optional enhancement.
 - Add deprecation warning support for `status` alias usage in backend logs.
 - Add loading and error states for all async dashboard sections.
 - Add sorting and pagination controls for orders.
@@ -604,14 +713,14 @@ Goal: make the workshop app usable in at least two languages with a clean transl
 ---
 
 ## Agenda (10-20 Minutes Per Segment)
-- Exercise 1: install Codex (App or CLI) and connect local project. (10-20 minutes)
+- Exercise 1: install Codex, create a review branch, set repo context, and generate architecture notes. (10-20 minutes)
 - Exercise 2: Bug Fix A (`status` vs `order_status`). (10-20 minutes)
 - Exercise 3: incident response for low-stock KPI mismatch. (10-20 minutes)
 - Exercise 4: Bug Fix C (`total_value` vs `totalValue`). (10-20 minutes)
-- Exercise 5: Feature A (supplier risk endpoint + UI). (10-20 minutes)
+- Exercise 5: Feature A with plan-first spec (`output/spec.md`). (10-20 minutes)
 - Exercise 6: Feature B (CSV export). (10-20 minutes)
 - Exercise 7: Playwright feature and validation. (10-20 minutes)
 - Exercise 8: Screenshot Capture final visual QA. (10-20 minutes)
-- Exercise 9: operations dashboard view. (10-20 minutes)
-- Exercise 10: multilingual UI (English + Spanish). (10-20 minutes)
+- Exercise 9: operations dashboard view. (optional follow-on)
+- Exercise 10: multilingual UI (English + Spanish). (optional follow-on)
 - Debrief and recap. (10-20 minutes)
