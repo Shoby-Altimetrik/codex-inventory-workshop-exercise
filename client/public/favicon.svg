@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Codex Inventory Workshop">
+  <rect width="64" height="64" rx="14" fill="#14233b" />
+  <path d="M18 20h28v6H18zm0 10h28v6H18zm0 10h18v6H18z" fill="#fbf7f1" />
+  <circle cx="46" cy="43" r="6" fill="#f97316" />
+</svg>
