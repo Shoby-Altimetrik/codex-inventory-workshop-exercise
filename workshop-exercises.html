@@ -480,6 +480,7 @@
       <p>
         A static, step-by-step workshop guide tailored for Altimetrik teams using OpenAI Codex.
         Complete each exercise in sequence, mark progress, and use App or CLI based on your preference.
+        The core arc is setup, context, planning, implementation, verification, and review.
       </p>
       <div class="hero-links">
         <a href="https://chatgpt.com/codex/get-started" target="_blank" rel="noopener noreferrer">Codex Get Started</a>
@@ -522,15 +523,26 @@
               <ul>
                 <li>Trace issues across frontend, backend, and tests in one loop.</li>
                 <li>Generate constrained diffs with minimal blast radius.</li>
+                <li>Use repo instructions, skills, and browser tools intentionally.</li>
                 <li>Close the loop with test verification plus browser and visual QA.</li>
               </ul>
             </article>
             <article class="brief-card">
               <h3>Client Outcomes</h3>
               <ul>
-                <li>Exercises 1-2: codify repeatable setup and contract-drift debugging.</li>
-                <li>Exercises 3-4: run incident-style triage and stabilize KPI/API contracts.</li>
-                <li>Exercises 5-10: ship features, automate QA, and expand product readiness.</li>
+                <li>Exercises 1-2: establish Codex context and debug contract drift safely.</li>
+                <li>Exercises 3-6: ship scoped fixes and features with artifacts and tests.</li>
+                <li>Exercises 7-8: validate with skills, browser automation, and screenshots.</li>
+                <li>Exercises 9-10: optional follow-ons for expansion after the core path.</li>
+              </ul>
+            </article>
+            <article class="brief-card">
+              <h3>What Codex Teaches</h3>
+              <ul>
+                <li>Use <code>AGENTS.md</code> and repo artifacts to keep context durable.</li>
+                <li>Plan before implementing multi-file work.</li>
+                <li>Choose the right verification surface for the problem.</li>
+                <li>Package changes for review without touching <code>main</code>.</li>
               </ul>
             </article>
           </div>
@@ -542,9 +554,17 @@
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Onboarding</span>
+              <span class="chip focus">Repo Context</span>
             </div>
           </div>
-          <p class="goal">Goal: get every participant running Codex against the local repository.</p>
+          <p class="goal">Goal: connect Codex to the repo, create a review branch, establish repo context, and produce an architecture artifact.</p>
+
+          <h4>Expected outputs</h4>
+          <ul>
+            <li>A review branch separate from <code>main</code>.</li>
+            <li>An updated <code>output/architecture-overview.md</code>.</li>
+            <li>A clear explanation of how the app starts and how the baseline is intentionally seeded.</li>
+          </ul>
 
           <h4>Choose your path</h4>
           <div class="mode-switch" role="tablist" aria-label="Codex mode switch">
@@ -556,10 +576,18 @@
             <ol class="checklist">
               <li>Open Codex App and sign in with ChatGPT.</li>
               <li>Select this repository folder.</li>
+              <li>Create a review branch in your terminal:
+                <div class="snippet">
+                  <button class="copy-btn" data-copy="git checkout -b codex/&lt;your-workshop-branch&gt;">Copy</button>
+                  <pre><code>git checkout -b codex/&lt;your-workshop-branch&gt;</code></pre>
+                </div>
+              </li>
               <li>Run these orientation prompts:
                 <ul>
-                  <li><code>Summarize this repository structure.</code></li>
-                  <li><code>List the intentionally failing tests and what each one checks.</code></li>
+                  <li><code>Read AGENTS.md and summarize the project rules I should follow.</code></li>
+                  <li><code>Create an architecture overview of this repository and save it to output/architecture-overview.md.</code></li>
+                  <li><code>Tell me which tests are intentionally failing on the workshop baseline and why.</code></li>
+                  <li><code>Start the backend and frontend locally and tell me how to verify they are running.</code></li>
                   <li><code>Map dashboard summary data from backend to frontend.</code></li>
                 </ul>
               </li>
@@ -582,6 +610,12 @@ brew install --cask codex</code></pre>
                   <pre><code>codex</code></pre>
                 </div>
               </li>
+              <li>Create a review branch:
+                <div class="snippet">
+                  <button class="copy-btn" data-copy="git checkout -b codex/&lt;your-workshop-branch&gt;">Copy</button>
+                  <pre><code>git checkout -b codex/&lt;your-workshop-branch&gt;</code></pre>
+                </div>
+              </li>
               <li>Sign in and run the same orientation prompts as App path.</li>
             </ol>
           </section>
@@ -590,6 +624,7 @@ brew install --cask codex</code></pre>
           <ul>
             <li>Codex (App or CLI) can read local files accurately.</li>
             <li>You can run prompts and get architecture-accurate answers.</li>
+            <li>A review branch exists and <code>output/architecture-overview.md</code> has been updated.</li>
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex1" /> Mark exercise complete</div>
@@ -731,14 +766,21 @@ pytest backend/test_bug_regressions.py -q</code></pre>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
               <span class="chip focus">Feature Build</span>
+              <span class="chip focus">Plan First</span>
             </div>
           </div>
           <p class="goal">Goal: implement risk endpoint and render supplier risk table in dashboard.</p>
 
+          <h4>Plan-first artifact</h4>
+          <ul>
+            <li>Create or update <code>output/spec.md</code> before implementation.</li>
+            <li>Capture the problem, acceptance criteria, backend/frontend changes, and verification plan.</li>
+          </ul>
+
           <h4>Codex setup (App or CLI)</h4>
           <ul>
             <li><strong>Codex App:</strong> Reuse your repo session in Codex App and run:
-              <code>Implement Feature A end-to-end: add GET /api/risk/suppliers with warehouse/category filters and render supplier risk rows in dashboard. Add or update tests.</code>
+              <code>Before coding, draft a concise spec in output/spec.md for Feature A. Then implement GET /api/risk/suppliers with warehouse/category filters, render supplier risk rows in dashboard, and update tests.</code>
             </li>
             <li><strong>Codex CLI:</strong> Run <code>codex</code> in repo root (or reuse your open session), then run the same prompt.</li>
           </ul>
@@ -762,6 +804,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
             <li>Endpoint returns 200 with a non-empty array.</li>
             <li>Payload shape matches contract.</li>
             <li>UI table renders and updates from API.</li>
+            <li><code>output/spec.md</code> reflects the accepted implementation plan.</li>
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex5" /> Mark exercise complete</div>
@@ -802,6 +845,27 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
           <div class="done-row"><input type="checkbox" data-exercise-id="ex6" /> Mark exercise complete</div>
         </article>
 
+        <section class="briefing">
+          <div class="brief-grid">
+            <article class="brief-card">
+              <h3>Skills Primer</h3>
+              <ul>
+                <li>Skills package a repeatable Codex workflow for reuse.</li>
+                <li>This repo includes <code>.codex/skills/workshop-evidence/SKILL.md</code> as a sample scaffold.</li>
+                <li>Use a skill when the task pattern repeats, not just because it exists.</li>
+              </ul>
+            </article>
+            <article class="brief-card">
+              <h3>MCP Primer</h3>
+              <ul>
+                <li>MCP extends Codex beyond local file edits into tool use.</li>
+                <li>Browser automation is the main example in this workshop.</li>
+                <li>Read <code>docs/codex/mcp-playwright.md</code> for the workshop framing.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
         <article class="exercise" id="ex7">
           <div class="exercise-header">
             <h3>Exercise 7: Playwright CLI Skill Feature - Add Orders Search UX</h3>
@@ -824,6 +888,12 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
           <ul>
             <li>Add a search field in Orders list filtering by order id, customer, and status.</li>
             <li>Filtering should update visible orders in real time.</li>
+          </ul>
+
+          <h4>Why a skill here</h4>
+          <ul>
+            <li>This step turns browser QA into a reusable workflow instead of one-off manual checking.</li>
+            <li>Read the repo sample skill if you want a local example of how workflows can be packaged.</li>
           </ul>
 
           <h4>Playwright CLI skill setup</h4>
@@ -850,6 +920,7 @@ $PWCLI screenshot</code></pre>
             <li>Search input exists and filters list correctly.</li>
             <li>Clearing search restores full list.</li>
             <li>Playwright flow verifies behavior with no regressions.</li>
+            <li>Browser evidence is saved or summarized for review.</li>
           </ul>
 
           <div class="done-row"><input type="checkbox" data-exercise-id="ex7" /> Mark exercise complete</div>
@@ -892,6 +963,7 @@ export SS_SKILL="$CODEX_HOME/skills/screenshot"</code></pre>
             <li>Supplier risk table populated and readable.</li>
             <li>Orders view with search filtering active.</li>
             <li>Export CSV control visible in Orders view.</li>
+            <li>Optional reviewer summary drafted from <code>docs/templates/reviewer-summary-template.md</code>.</li>
           </ol>
 
           <h4>Capture commands</h4>
@@ -913,6 +985,27 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
           <div class="done-row"><input type="checkbox" data-exercise-id="ex8" /> Mark exercise complete</div>
         </article>
 
+        <section class="briefing">
+          <div class="brief-grid">
+            <article class="brief-card">
+              <h3>Review Workflow</h3>
+              <ul>
+                <li>Keep workshop changes on a review branch, not on <code>main</code>.</li>
+                <li>Summarize what remains intentionally broken for workshop participants.</li>
+                <li>Use <code>docs/templates/reviewer-summary-template.md</code> as a reviewer handoff.</li>
+              </ul>
+            </article>
+            <article class="brief-card">
+              <h3>Advanced Follow-Ons</h3>
+              <ul>
+                <li>Try a git worktree or isolated branch for experiments.</li>
+                <li>Use parallel agents only for bounded audits or drafting tasks.</li>
+                <li>Treat Exercises 9-10 as optional follow-on scope after the core path.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
         <article class="exercise" id="ex9">
           <div class="exercise-header">
             <h3>Exercise 9: Feature C - Add Operations Dashboard View</h3>
@@ -921,7 +1014,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
               <span class="chip focus">Feature Build</span>
             </div>
           </div>
-          <p class="goal">Goal: add an operations-focused dashboard view with demand-vs-spend insights.</p>
+          <p class="goal">Goal: add an operations-focused dashboard view with demand-vs-spend insights. Optional follow-on exercise for this phase.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -964,7 +1057,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
               <span class="chip focus">Localization</span>
             </div>
           </div>
-          <p class="goal">Goal: make the UI multilingual with runtime language switching and persistence.</p>
+          <p class="goal">Goal: make the UI multilingual with runtime language switching and persistence. Optional follow-on exercise for this phase.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
