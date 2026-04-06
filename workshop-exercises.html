@@ -44,6 +44,10 @@
       scroll-behavior: smooth;
     }
 
+    html {
+      scroll-padding-top: 18px;
+    }
+
     .shell {
       max-width: 1220px;
       margin: 0 auto;
@@ -108,6 +112,14 @@
     .hero-links a:hover {
       transform: translateY(-1px);
       border-color: var(--accent);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    .exercise-summary:focus-visible {
+      outline: 3px solid rgba(14, 165, 164, 0.34);
+      outline-offset: 3px;
     }
 
     .layout {
@@ -190,13 +202,25 @@
 
     .nav-list a {
       display: block;
+      position: relative;
       text-decoration: none;
       color: var(--ink);
       border: 1px solid transparent;
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: 9px 10px 9px 14px;
       font-size: 0.86rem;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-list a::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      bottom: 9px;
+      width: 4px;
+      border-radius: 999px;
+      background: transparent;
     }
 
     .nav-list a small {
@@ -210,6 +234,28 @@
     .nav-list a.active {
       border-color: var(--line);
       background: #fff8ec;
+    }
+
+    .nav-list a.active::before {
+      background: var(--accent-2);
+    }
+
+    .nav-list a.done {
+      background: #f5fbf7;
+      border-color: #d5eadb;
+    }
+
+    .nav-list a.done::before {
+      background: var(--ok);
+    }
+
+    .nav-list a.next {
+      background: #fff7eb;
+      border-color: #f1dfc3;
+    }
+
+    .nav-list a.next::before {
+      background: var(--accent);
     }
 
     .content {
@@ -230,6 +276,15 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 12px;
+    }
+
+    .briefing.is-supporting {
+      background: #fffaf4;
+      box-shadow: 0 8px 20px rgba(20, 35, 59, 0.06);
+    }
+
+    .briefing.is-supporting .brief-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
     .brief-card {
@@ -253,43 +308,141 @@
     }
 
     .exercise {
+      position: relative;
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
       background: var(--surface);
       box-shadow: var(--shadow);
-      padding: 18px;
+      padding: 26px 28px 24px;
+      display: grid;
+      gap: 18px;
       animation: fade-up 0.55s ease both;
+      scroll-margin-top: 18px;
+    }
+
+    .exercise::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: transparent;
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+
+    .exercise.is-current::before {
+      background: var(--accent-2);
+    }
+
+    .exercise.is-next::before {
+      background: var(--accent);
+    }
+
+    .exercise.is-complete::before {
+      background: var(--ok);
+    }
+
+    .exercise.is-optional {
+      background: #fffdfa;
+      box-shadow: 0 10px 24px rgba(20, 35, 59, 0.07);
+    }
+
+    .exercise.is-collapsed {
+      gap: 0;
+    }
+
+    .exercise-summary {
+      display: grid;
+      gap: 18px;
+      cursor: pointer;
+    }
+
+    .exercise-summary[aria-expanded="true"] {
+      cursor: default;
+    }
+
+    .exercise-summary:focus-visible {
+      border-radius: var(--radius-md);
+    }
+
+    .exercise-body {
+      display: grid;
+      gap: 24px;
+      padding-top: 6px;
+      margin: 0 35px;
+    }
+
+    .exercise.is-collapsed .exercise-body {
+      display: none;
     }
 
     .exercise-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      column-gap: 16px;
+      row-gap: 12px;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: 0;
     }
 
     .exercise h3 {
       margin: 0;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
-      font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+      font-size: clamp(1rem, 1.8vw, 1.22rem);
+      line-height: 1.16;
       letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .exercise h3::before {
+      content: "";
+      flex: 0 0 auto;
+      inline-size: 22px;
+      block-size: 22px;
+      border-radius: 999px;
+      border: 1.5px solid #d6c8b4;
+      background: #fffdfa;
+      box-shadow: inset 0 0 0 4px transparent;
+    }
+
+    .exercise.is-current h3::before {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 5px rgba(249, 115, 22, 0.22);
+      background: #fff7eb;
+    }
+
+    .exercise.is-complete h3::before {
+      content: "\2713";
+      display: grid;
+      place-items: center;
+      border-color: var(--ok);
+      background: #f0fdf4;
+      box-shadow: none;
+      color: var(--ok);
+      font-size: 0.8rem;
+      font-weight: 800;
     }
 
     .chips {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      flex-wrap: nowrap;
+      gap: 10px;
+      align-items: center;
+      justify-self: end;
+      white-space: nowrap;
     }
 
     .chip {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       border-radius: 999px;
-      padding: 5px 9px;
+      padding: 5px 10px;
       border: 1px solid var(--line);
       background: #fff;
     }
@@ -307,18 +460,70 @@
     }
 
     .goal {
-      margin: 10px 0 14px;
+      margin: 0 35px;
       color: var(--ink-soft);
-      border-left: 4px solid var(--accent);
-      padding-left: 10px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      font-size: 1.02rem;
+      line-height: 1.5;
+    }
+
+    .goal strong {
+      color: var(--ink);
     }
 
     .exercise h4 {
-      margin: 14px 0 6px;
+      margin: 0 0 8px;
       font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: #243750;
+    }
+
+    .exercise-section {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .exercise-section.is-reference,
+    .exercise-section.is-path,
+    .exercise-section.is-execution,
+    .exercise-section.is-acceptance {
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+    }
+
+    .exercise-section.is-reference {
+      border-color: #efe5d5;
+      background: #fffdf9;
+    }
+
+    .exercise-section.is-path {
+      border-color: #eadfce;
+      background: #fffaf4;
+    }
+
+    .exercise-section.is-execution {
+      border-color: #efe0ca;
+      background: #fff8f1;
+    }
+
+    .exercise-section.is-acceptance {
+      border-color: #d6eeec;
+      background: #f7fcfb;
+    }
+
+    .exercise-section > :last-child {
+      margin-bottom: 0;
+    }
+
+    .exercise-section > ul:last-child,
+    .exercise-section > ol:last-child,
+    .exercise-section > .mode-group:last-child,
+    .exercise-section > .snippet:last-child {
+      margin-bottom: 0;
     }
 
     ul,
@@ -393,12 +598,15 @@
       color: var(--ink);
     }
 
+    .mode-group {
+      display: grid;
+      gap: 14px;
+    }
+
     .mode-panel {
-      display: none;
       border: 1px dashed var(--line);
       border-radius: var(--radius-sm);
-      padding: 10px;
-      margin-top: 8px;
+      padding: 18px 20px;
       background: #fffdfa;
     }
 
@@ -406,22 +614,58 @@
       display: block;
     }
 
+    .mode-panel[hidden] {
+      display: none !important;
+    }
+
+    .mode-panel ul,
+    .mode-panel ol {
+      margin-bottom: 0;
+    }
+
     .done-row {
-      margin-top: 14px;
-      padding-top: 10px;
+      margin-top: 8px;
+      padding-top: 22px;
       border-top: 1px dashed var(--line);
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-weight: 700;
       color: var(--ink-soft);
     }
 
-    .done-row input {
-      inline-size: 18px;
-      block-size: 18px;
-      accent-color: var(--ok);
+    .complete-btn {
+      border: 1px solid #12a6a9;
+      background: #17b3b7;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 16px 36px;
+      font-weight: 800;
+      font-size: 1rem;
+      line-height: 1;
       cursor: pointer;
+      box-shadow: 0 10px 18px rgba(23, 179, 183, 0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .complete-btn:hover {
+      border-color: #0e989b;
+      background: #11a6aa;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(23, 179, 183, 0.24);
+    }
+
+    .complete-btn.is-complete {
+      border-color: #9fdde0;
+      background: #e9fbfb;
+      color: #0f7f82;
+      box-shadow: none;
+    }
+
+    .complete-btn.is-complete::before {
+      content: "\2713";
+      margin-right: 8px;
     }
 
     .footer {
@@ -452,11 +696,17 @@
 
       .mobile-nav-toggle {
         display: block;
+        position: sticky;
+        top: 10px;
+        z-index: 4;
+        box-shadow: 0 10px 18px rgba(20, 35, 59, 0.08);
       }
 
       .sidebar {
         position: static;
         display: none;
+        max-height: min(60vh, 480px);
+        overflow: hidden;
       }
 
       .sidebar.open {
@@ -469,6 +719,59 @@
 
       .hero {
         padding: 20px 16px;
+      }
+
+      .exercise {
+        padding: 20px 18px;
+        gap: 14px;
+      }
+
+      .exercise-body {
+        gap: 18px;
+        padding-top: 4px;
+      }
+
+      .exercise-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding-bottom: 0;
+      }
+
+      .exercise h3 {
+        font-size: 1.04rem;
+      }
+
+      .chips {
+        justify-self: start;
+      }
+
+      .exercise-section.is-reference,
+      .exercise-section.is-path,
+      .exercise-section.is-execution,
+      .exercise-section.is-acceptance {
+        padding: 16px;
+      }
+
+      .goal {
+        font-size: 0.98rem;
+      }
+
+      .complete-btn {
+        padding: 14px 26px;
+        font-size: 0.96rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
       }
     }
   </style>
@@ -553,11 +856,10 @@
             <h3>Exercise 1: Install Codex (App or CLI) and Connect Project</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
-              <span class="chip focus">Onboarding</span>
-              <span class="chip focus">Repo Context</span>
+              <span class="chip focus">Workshop Setup</span>
             </div>
           </div>
-          <p class="goal">Goal: connect Codex to the repo, create a review branch, establish repo context, and produce an architecture artifact.</p>
+          <p class="goal"><strong>Goal:</strong> connect Codex to the repo, create a review branch, establish repo context, and produce an architecture artifact.</p>
 
           <h4>Expected outputs</h4>
           <ul>
@@ -627,7 +929,7 @@ brew install --cask codex</code></pre>
             <li>A review branch exists and <code>output/architecture-overview.md</code> has been updated.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex1" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex1">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex2">
@@ -638,7 +940,7 @@ brew install --cask codex</code></pre>
               <span class="chip focus">Debugging</span>
             </div>
           </div>
-          <p class="goal">Goal: fix mismatch between <code>status</code> and <code>order_status</code>.</p>
+          <p class="goal"><strong>Goal:</strong> fix mismatch between <code>status</code> and <code>order_status</code>.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -670,7 +972,7 @@ npm test</code></pre>
             <li>Status filter returns correct order subsets.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex2" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex2">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex3">
@@ -681,7 +983,7 @@ npm test</code></pre>
               <span class="chip focus">Incident Response</span>
             </div>
           </div>
-          <p class="goal">Goal: triage and resolve a production-style KPI mismatch affecting planning decisions.</p>
+          <p class="goal"><strong>Goal:</strong> triage and resolve a production-style KPI mismatch affecting planning decisions.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -722,7 +1024,7 @@ pytest backend/test_bug_regressions.py -q</code></pre>
             <li><code>output/incident-rca.md</code> documents root cause and mitigation.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex3" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex3">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex4">
@@ -733,7 +1035,7 @@ pytest backend/test_bug_regressions.py -q</code></pre>
               <span class="chip focus">API Contract</span>
             </div>
           </div>
-          <p class="goal">Goal: align dashboard response field naming between API and UI.</p>
+          <p class="goal"><strong>Goal:</strong> align dashboard response field naming between API and UI.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -757,7 +1059,7 @@ pytest backend/test_bug_regressions.py -q</code></pre>
             <li>Regression tests pass for naming contract.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex4" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex4">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex5">
@@ -765,11 +1067,10 @@ pytest backend/test_bug_regressions.py -q</code></pre>
             <h3>Exercise 5: Feature A - Supplier Lead Time Risk API + UI</h3>
             <div class="chips">
               <span class="chip time">10-20 minutes</span>
-              <span class="chip focus">Feature Build</span>
-              <span class="chip focus">Plan First</span>
+              <span class="chip focus">Planned Build</span>
             </div>
           </div>
-          <p class="goal">Goal: implement risk endpoint and render supplier risk table in dashboard.</p>
+          <p class="goal"><strong>Goal:</strong> implement risk endpoint and render supplier risk table in dashboard.</p>
 
           <h4>Plan-first artifact</h4>
           <ul>
@@ -807,7 +1108,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
             <li><code>output/spec.md</code> reflects the accepted implementation plan.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex5" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex5">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex6">
@@ -818,7 +1119,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
               <span class="chip focus">Feature Build</span>
             </div>
           </div>
-          <p class="goal">Goal: implement filter-aware CSV export and wire export interaction in UI.</p>
+          <p class="goal"><strong>Goal:</strong> implement filter-aware CSV export and wire export interaction in UI.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -842,7 +1143,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
             <li>Frontend export trigger test passes.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex6" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex6">Mark exercise complete</button></div>
         </article>
 
         <section class="briefing">
@@ -874,7 +1175,7 @@ pytest backend/test_feature_endpoints.py -q</code></pre>
               <span class="chip focus">Playwright Skill</span>
             </div>
           </div>
-          <p class="goal">Goal: add an Order Search input and validate real browser behavior with Playwright CLI skill flow.</p>
+          <p class="goal"><strong>Goal:</strong> add an Order Search input and validate real browser behavior with Playwright CLI skill flow.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -923,7 +1224,7 @@ $PWCLI screenshot</code></pre>
             <li>Browser evidence is saved or summarized for review.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex7" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex7">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex8">
@@ -934,7 +1235,7 @@ $PWCLI screenshot</code></pre>
               <span class="chip focus">Screenshot Skill</span>
             </div>
           </div>
-          <p class="goal">Goal: validate visually that all built features are present and correct using Screenshot Capture.</p>
+          <p class="goal"><strong>Goal:</strong> validate visually that all built features are present and correct using Screenshot Capture.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -982,7 +1283,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
             <li>Artifacts are saved for instructor review.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex8" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex8">Mark exercise complete</button></div>
         </article>
 
         <section class="briefing">
@@ -1014,7 +1315,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
               <span class="chip focus">Feature Build</span>
             </div>
           </div>
-          <p class="goal">Goal: add an operations-focused dashboard view with demand-vs-spend insights. Optional follow-on exercise for this phase.</p>
+          <p class="goal"><strong>Goal:</strong> add an operations-focused dashboard view with demand-vs-spend insights. Optional follow-on exercise for this phase.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -1046,7 +1347,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
             <li>Frontend tests for the new dashboard behavior pass.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex9" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex9">Mark exercise complete</button></div>
         </article>
 
         <article class="exercise" id="ex10">
@@ -1057,7 +1358,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
               <span class="chip focus">Localization</span>
             </div>
           </div>
-          <p class="goal">Goal: make the UI multilingual with runtime language switching and persistence. Optional follow-on exercise for this phase.</p>
+          <p class="goal"><strong>Goal:</strong> make the UI multilingual with runtime language switching and persistence. Optional follow-on exercise for this phase.</p>
 
           <h4>Codex setup (App or CLI)</h4>
           <ul>
@@ -1090,7 +1391,7 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
             <li>Translation-related tests pass.</li>
           </ul>
 
-          <div class="done-row"><input type="checkbox" data-exercise-id="ex10" /> Mark exercise complete</div>
+          <div class="done-row"><button type="button" class="complete-btn" data-exercise-id="ex10">Mark exercise complete</button></div>
         </article>
 
         <section class="footer">
@@ -1104,13 +1405,30 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
 
   <script>
     const STORAGE_KEY = "codex_workshop_progress_v1";
+    const MODE_STORAGE_KEY = "codex_workshop_mode_v1";
+    const OPTIONAL_EXERCISES = new Set(["ex9", "ex10"]);
 
-    const checkboxes = Array.from(document.querySelectorAll("input[data-exercise-id]"));
+    const completionButtons = Array.from(document.querySelectorAll(".complete-btn[data-exercise-id]"));
     const progressText = document.getElementById("progress-text");
     const progressFill = document.getElementById("progress-fill");
     const navLinks = Array.from(document.querySelectorAll("#exercise-nav a"));
     const mobileToggle = document.getElementById("mobile-nav-toggle");
     const sidebar = document.getElementById("sidebar");
+    const exercises = Array.from(document.querySelectorAll("main .exercise"));
+    let activeExerciseId = exercises[0]?.id || null;
+    let expandedExerciseId = null;
+
+    function loadMode() {
+      try {
+        return localStorage.getItem(MODE_STORAGE_KEY) === "cli" ? "cli" : "app";
+      } catch {
+        return "app";
+      }
+    }
+
+    function saveMode(mode) {
+      localStorage.setItem(MODE_STORAGE_KEY, mode);
+    }
 
     function loadProgress() {
       try {
@@ -1125,40 +1443,332 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
+    function classifySection(headingText) {
+      if (headingText === "Acceptance criteria") return "is-acceptance";
+      if (headingText === "Choose your path" || headingText === "Codex setup (App or CLI)") return "is-path";
+      if (
+        headingText === "Tasks" ||
+        headingText === "Run tests" ||
+        headingText === "Run regression checks" ||
+        headingText === "Run feature tests" ||
+        headingText === "Validation flow" ||
+        headingText === "Capture checklist" ||
+        headingText === "Capture commands"
+      ) {
+        return "is-execution";
+      }
+      return "is-reference";
+    }
+
+    function wrapExerciseSections() {
+      exercises.forEach((exercise) => {
+        exercise.classList.toggle("is-optional", OPTIONAL_EXERCISES.has(exercise.id));
+        let heading = exercise.querySelector(":scope > h4");
+        while (heading) {
+          const section = document.createElement("section");
+          section.className = `exercise-section ${classifySection(heading.textContent.trim())}`;
+          heading.before(section);
+
+          let node = heading;
+          while (node && !(node !== heading && node.tagName === "H4") && !node.classList.contains("done-row")) {
+            const next = node.nextElementSibling;
+            section.append(node);
+            node = next;
+          }
+
+          heading = node && node.tagName === "H4" ? node : null;
+        }
+      });
+    }
+
+    function buildExerciseAccordion() {
+      exercises.forEach((exercise) => {
+        const summary = document.createElement("div");
+        summary.className = "exercise-summary";
+        summary.tabIndex = 0;
+        summary.setAttribute("role", "button");
+        summary.dataset.exerciseId = exercise.id;
+
+        const header = exercise.querySelector(":scope > .exercise-header");
+        const goal = exercise.querySelector(":scope > .goal");
+        if (header) summary.append(header);
+        if (goal) summary.append(goal);
+        exercise.prepend(summary);
+
+        const body = document.createElement("div");
+        body.className = "exercise-body";
+        const bodyChildren = Array.from(exercise.children).filter((child) => child !== summary);
+        body.append(...bodyChildren);
+        exercise.append(body);
+
+        summary.addEventListener("click", () => setExpandedExercise(exercise.id, { scrollIntoView: false }));
+        summary.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          setExpandedExercise(exercise.id, { scrollIntoView: false });
+        });
+      });
+    }
+
+    function createModeSwitch() {
+      const switchEl = document.createElement("div");
+      switchEl.className = "mode-switch";
+      switchEl.setAttribute("role", "tablist");
+      switchEl.setAttribute("aria-label", "Codex mode switch");
+
+      ["app", "cli"].forEach((mode) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.mode = mode;
+        button.textContent = mode === "app" ? "Codex App" : "Codex CLI";
+        switchEl.append(button);
+      });
+
+      return switchEl;
+    }
+
+    function normalizeModeGroups() {
+      exercises.forEach((exercise) => {
+        const directSwitch = exercise.querySelector(":scope > .exercise-section .mode-switch");
+        if (directSwitch && !directSwitch.parentElement.classList.contains("mode-group")) {
+          const group = document.createElement("div");
+          group.className = "mode-group";
+          let panel = directSwitch.nextElementSibling;
+          const panels = [];
+          while (panel && panel.classList.contains("mode-panel")) {
+            const next = panel.nextElementSibling;
+            panels.push(panel);
+            panel = next;
+          }
+
+          directSwitch.before(group);
+          group.append(directSwitch, ...panels);
+        }
+      });
+    }
+
+    function transformCodexSetupSections() {
+      exercises.forEach((exercise) => {
+        const setupSection = Array.from(exercise.querySelectorAll(".exercise-section")).find((section) => {
+          const heading = section.querySelector(":scope > h4");
+          return heading && heading.textContent.trim() === "Codex setup (App or CLI)";
+        });
+
+        if (!setupSection) return;
+
+        const list = setupSection.querySelector(":scope > ul");
+        if (!list) return;
+
+        const items = Array.from(list.children);
+        const appItem = items.find((item) => item.textContent.includes("Codex App:"));
+        const cliItem = items.find((item) => item.textContent.includes("Codex CLI:"));
+        if (!appItem || !cliItem) return;
+
+        const group = document.createElement("div");
+        group.className = "mode-group";
+        group.append(createModeSwitch());
+
+        const appPanel = document.createElement("section");
+        appPanel.className = "mode-panel";
+        appPanel.dataset.modePanel = "app";
+        const appList = document.createElement("ul");
+        appList.append(appItem);
+        appPanel.append(appList);
+
+        const cliPanel = document.createElement("section");
+        cliPanel.className = "mode-panel";
+        cliPanel.dataset.modePanel = "cli";
+        const cliList = document.createElement("ul");
+        cliList.append(cliItem);
+        cliPanel.append(cliList);
+
+        group.append(appPanel, cliPanel);
+        list.replaceWith(group);
+      });
+    }
+
+    function syncModeGroup(group, mode) {
+      const buttons = Array.from(group.querySelectorAll(".mode-switch button"));
+      const panels = Array.from(group.querySelectorAll(".mode-panel"));
+
+      buttons.forEach((button) => {
+        const isActive = button.dataset.mode === mode;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-selected", String(isActive));
+        button.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        const isActive = panel.dataset.modePanel === mode;
+        panel.classList.toggle("active", isActive);
+        panel.hidden = !isActive;
+      });
+    }
+
+    function applyMode(mode) {
+      saveMode(mode);
+      document.querySelectorAll(".mode-group").forEach((group) => syncModeGroup(group, mode));
+    }
+
+    function initModeGroups() {
+      const groups = Array.from(document.querySelectorAll(".mode-group"));
+      groups.forEach((group, index) => {
+        const buttons = Array.from(group.querySelectorAll(".mode-switch button"));
+        const panels = Array.from(group.querySelectorAll(".mode-panel"));
+        const groupId = `mode-group-${index + 1}`;
+
+        buttons.forEach((button) => {
+          const mode = button.dataset.mode;
+          const panel = panels.find((item) => item.dataset.modePanel === mode);
+          const buttonId = `${groupId}-tab-${mode}`;
+          const panelId = `${groupId}-panel-${mode}`;
+
+          button.type = "button";
+          button.id = buttonId;
+          button.setAttribute("role", "tab");
+          button.setAttribute("aria-controls", panelId);
+          button.addEventListener("click", () => applyMode(mode));
+        });
+
+        panels.forEach((panel) => {
+          const mode = panel.dataset.modePanel;
+          const button = buttons.find((item) => item.dataset.mode === mode);
+          panel.id = `${groupId}-panel-${mode}`;
+          panel.setAttribute("role", "tabpanel");
+          panel.setAttribute("aria-labelledby", button.id);
+        });
+
+        const tablist = group.querySelector(".mode-switch");
+        tablist.addEventListener("keydown", (event) => {
+          const currentIndex = buttons.findIndex((button) => button === document.activeElement);
+          if (currentIndex === -1) return;
+          if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+          event.preventDefault();
+          const nextIndex = event.key === "ArrowRight"
+            ? (currentIndex + 1) % buttons.length
+            : (currentIndex - 1 + buttons.length) % buttons.length;
+          buttons[nextIndex].focus();
+          buttons[nextIndex].click();
+        });
+      });
+
+      applyMode(loadMode());
+    }
+
+    function updateExerciseStateClasses() {
+      const state = loadProgress();
+      let nextIncompleteId = null;
+
+      exercises.forEach((exercise) => {
+        const done = Boolean(state[exercise.id]);
+        exercise.classList.toggle("is-complete", done);
+        exercise.classList.remove("is-next");
+
+        const link = navLinks.find((navLink) => navLink.getAttribute("href") === `#${exercise.id}`);
+        link?.classList.toggle("done", done);
+        link?.classList.remove("next");
+
+        if (!done && !nextIncompleteId) {
+          nextIncompleteId = exercise.id;
+        }
+      });
+
+      if (nextIncompleteId) {
+        const nextExercise = document.getElementById(nextIncompleteId);
+        const nextLink = navLinks.find((navLink) => navLink.getAttribute("href") === `#${nextIncompleteId}`);
+        nextExercise?.classList.add("is-next");
+        nextLink?.classList.add("next");
+      }
+    }
+
+    function getFirstIncompleteExerciseId(state = loadProgress()) {
+      return exercises.find((exercise) => !state[exercise.id])?.id || null;
+    }
+
+    function getDefaultExpandedExerciseId(state = loadProgress()) {
+      return getFirstIncompleteExerciseId(state) || exercises.at(-1)?.id || exercises[0]?.id || null;
+    }
+
+    function setExpandedExercise(id, options = {}) {
+      if (!id) return;
+      expandedExerciseId = id;
+      const { scrollIntoView = false } = options;
+
+      exercises.forEach((exercise) => {
+        const isExpanded = exercise.id === id;
+        exercise.classList.toggle("is-collapsed", !isExpanded);
+        const summary = exercise.querySelector(".exercise-summary");
+        const body = exercise.querySelector(".exercise-body");
+        summary?.setAttribute("aria-expanded", String(isExpanded));
+        if (body) body.hidden = !isExpanded;
+      });
+
+      setActiveExercise(id);
+
+      if (scrollIntoView) {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function updateCompletionButtons() {
+      const state = loadProgress();
+      completionButtons.forEach((button) => {
+        const done = Boolean(state[button.dataset.exerciseId]);
+        button.classList.toggle("is-complete", done);
+        button.textContent = done ? "Completed" : "Mark exercise complete";
+        button.setAttribute("aria-pressed", String(done));
+      });
+    }
+
     function refreshProgress() {
-      const done = checkboxes.filter((cb) => cb.checked).length;
-      const total = checkboxes.length;
+      const state = loadProgress();
+      const done = exercises.filter((exercise) => state[exercise.id]).length;
+      const total = exercises.length;
       progressText.textContent = `${done} of ${total} complete`;
       progressFill.style.width = `${(done / total) * 100}%`;
+      updateExerciseStateClasses();
+      updateCompletionButtons();
     }
 
-    function initCheckboxes() {
-      const state = loadProgress();
-      checkboxes.forEach((cb) => {
-        const key = cb.dataset.exerciseId;
-        cb.checked = Boolean(state[key]);
-        cb.addEventListener("change", () => {
+    function setActiveExercise(id) {
+      activeExerciseId = id;
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute("href") === `#${id}`;
+        link.classList.toggle("active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "step");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+
+      exercises.forEach((exercise) => {
+        exercise.classList.toggle("is-current", exercise.id === id);
+      });
+    }
+
+    function initCompletionButtons() {
+      completionButtons.forEach((button) => {
+        const key = button.dataset.exerciseId;
+        button.addEventListener("click", () => {
           const next = loadProgress();
-          next[key] = cb.checked;
+          const nextValue = !next[key];
+          next[key] = nextValue;
           saveProgress(next);
           refreshProgress();
-        });
-      });
-      refreshProgress();
-    }
 
-    function initModeSwitch() {
-      const buttons = Array.from(document.querySelectorAll(".mode-switch button"));
-      const panels = Array.from(document.querySelectorAll(".mode-panel"));
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const mode = button.dataset.mode;
-          buttons.forEach((b) => b.classList.toggle("active", b === button));
-          panels.forEach((panel) => {
-            panel.classList.toggle("active", panel.dataset.modePanel === mode);
-          });
+          if (nextValue) {
+            const nextExerciseId = getFirstIncompleteExerciseId(next);
+            setExpandedExercise(nextExerciseId || key, { scrollIntoView: Boolean(nextExerciseId && nextExerciseId !== key) });
+            return;
+          }
+
+          setExpandedExercise(key);
         });
       });
+
+      setExpandedExercise(getDefaultExpandedExerciseId(), { scrollIntoView: false });
+      refreshProgress();
     }
 
     function initCopyButtons() {
@@ -1183,42 +1793,97 @@ python3 "$SS_SKILL/scripts/take_screenshot.py" --path output/screenshots/final-v
     }
 
     function initScrollSpy() {
-      const sections = Array.from(document.querySelectorAll("main .exercise"));
+      const visibleExercises = new Map();
+      const exerciseOrder = new Map(exercises.map((exercise, index) => [exercise.id, index]));
+
+      function updateActiveFromVisibility() {
+        if (visibleExercises.size === 0) return;
+
+        const bestCandidate = Array.from(visibleExercises.entries())
+          .sort((a, b) => {
+            if (b[1].ratio !== a[1].ratio) {
+              return b[1].ratio - a[1].ratio;
+            }
+
+            if (a[1].top !== b[1].top) {
+              return a[1].top - b[1].top;
+            }
+
+            return (exerciseOrder.get(a[0]) ?? 0) - (exerciseOrder.get(b[0]) ?? 0);
+          })[0];
+
+        if (bestCandidate && bestCandidate[0] !== activeExerciseId) {
+          setActiveExercise(bestCandidate[0]);
+        }
+      }
+
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const id = `#${entry.target.id}`;
-            navLinks.forEach((link) => {
-              link.classList.toggle("active", link.getAttribute("href") === id);
-            });
+            const id = entry.target.id;
+            if (entry.isIntersecting) {
+              visibleExercises.set(id, {
+                ratio: entry.intersectionRatio,
+                top: entry.boundingClientRect.top,
+              });
+            } else {
+              visibleExercises.delete(id);
+            }
           });
+
+          updateActiveFromVisibility();
         },
-        { threshold: 0.45 }
+        {
+          rootMargin: "-12% 0px -55% 0px",
+          threshold: [0.1, 0.25, 0.4, 0.6, 0.85],
+        }
       );
-      sections.forEach((section) => observer.observe(section));
+
+      exercises.forEach((exercise) => observer.observe(exercise));
     }
 
-    mobileToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("open");
-      mobileToggle.textContent = sidebar.classList.contains("open")
+    function syncMobileNavState() {
+      const isOpen = sidebar.classList.contains("open");
+      mobileToggle.setAttribute("aria-expanded", String(isOpen));
+      mobileToggle.textContent = isOpen
         ? "Hide Exercise Navigation"
         : "Show Exercise Navigation";
-    });
+    }
+
+    function initMobileNav() {
+      mobileToggle.type = "button";
+      mobileToggle.setAttribute("aria-controls", "sidebar");
+      syncMobileNavState();
+
+      mobileToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        syncMobileNavState();
+      });
+    }
 
     navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
+      link.addEventListener("click", (event) => {
+        const targetId = link.getAttribute("href")?.slice(1);
+        if (targetId) {
+          event.preventDefault();
+          setExpandedExercise(targetId, { scrollIntoView: true });
+        }
         if (window.innerWidth <= 980) {
           sidebar.classList.remove("open");
-          mobileToggle.textContent = "Show Exercise Navigation";
+          syncMobileNavState();
         }
       });
     });
 
-    initCheckboxes();
-    initModeSwitch();
+    wrapExerciseSections();
+    normalizeModeGroups();
+    transformCodexSetupSections();
+    buildExerciseAccordion();
+    initModeGroups();
+    initCompletionButtons();
     initCopyButtons();
     initScrollSpy();
+    initMobileNav();
   </script>
 </body>
 </html>
