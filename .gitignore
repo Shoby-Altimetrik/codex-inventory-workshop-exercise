@@ -1,5 +1,6 @@
 node_modules/
 client/node_modules/
+client/node_modules.bak*/
 client/dist/
 client/coverage/
 client/.vitest/
@@ -10,4 +11,15 @@ __pycache__/
 .venv/
 .DS_Store
 .npm-cache/
-output/
+.playwright-cli/
+output/*
+!output/.gitkeep
+!output/README.md
+!output/architecture-overview.md
+!output/spec.md
+!output/incident-rca.md
+!output/screenshots/
+!output/screenshots/.gitkeep
+!output/playwright/
+!output/playwright/.gitkeep
+docs/reference/*.pdf

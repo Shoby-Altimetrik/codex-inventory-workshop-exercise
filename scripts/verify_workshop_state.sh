@@ -39,12 +39,26 @@ fi
 cd "$ROOT_DIR"
 
 if [[ ! -d ".venv" ]]; then
-  echo "Error: .venv not found. Run setup first."
+  echo "Error: .venv not found."
+  echo "Setup:"
+  echo "  python3 -m venv .venv"
+  echo "  source .venv/bin/activate"
+  echo "  pip install -r server/requirements.txt pytest httpx"
+  exit 1
+fi
+
+read -r PYTHON_MAJOR PYTHON_MINOR < <("./.venv/bin/python" -c 'import sys; print(sys.version_info.major, sys.version_info.minor)')
+if (( PYTHON_MAJOR < 3 || (PYTHON_MAJOR == 3 && PYTHON_MINOR < 11) )); then
+  echo "Error: .venv is using Python ${PYTHON_MAJOR}.${PYTHON_MINOR}, but the workshop requires Python 3.11+."
+  echo "Recreate the environment with Python 3.11 or newer before running verification."
   exit 1
 fi
 
 if [[ ! -d "client/node_modules" ]]; then
-  echo "Error: client/node_modules not found. Run npm install in client first."
+  echo "Error: client/node_modules not found."
+  echo "Setup:"
+  echo "  cd client"
+  echo "  npm install"
   exit 1
 fi
 
